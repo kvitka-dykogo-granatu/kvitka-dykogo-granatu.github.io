@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>Olha Baliasina</title>
-<meta name="description" content="Olha Baliasina. Data scientist and visualization developer in Paris. Projects in machine learning, data engineering and interactive visualization.">
+<meta name="description" content="Olha Baliasina. Data scientist and visualization developer in Paris. An interactive map of her projects in machine learning, data engineering and visualization.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&amp;family=Source+Sans+3:ital,wght@0,400;0,600;1,400&amp;display=swap">
 <style>
-/* Layout: one calm column (max 1080px), left-aligned. The hero pairs text with a circle-packed map of the projects,
-   a nod to the thesis tool where every circle is one team. Everything else is quiet lists with hairlines. */
+/* Layout: the page opens on a dark stage where every circle is one project and bubble sets outline
+   whatever lens is active, the same device as in her thesis tool. Below it, each featured project gets
+   a drawn schema or a real-data chart beside short text. One calm column, max 1120px, left-aligned. */
 :root {
   --bg: #F2F4F8;
   --surface: #FFFFFF;
@@ -22,26 +23,35 @@
   --accent: #1E4FD8;
   --accent-soft: #E3EAFB;
   --on-accent: #FFFFFF;
-  --c-ml: #7A3FB5;
-  --c-de: #0E8A8C;
-  --c-viz: #D9831A;
-  --c-da: #CF3F5C;
+  --c-viz: #B8731F;
+  --c-de: #15878E;
+  --c-da: #D14D6D;
+  --c-ml: #8460C9;
+  --stage: #0F1A33;
+  --stage-2: #172443;
+  --stage-ink: #EAF0FA;
+  --stage-ink-2: #A9B6D2;
+  --stage-line: #2B3A5E;
+  --s-viz: #C97F26;
+  --s-de: #1A9DA4;
+  --s-da: #E0607F;
+  --s-ml: #9A74D8;
   --font-display: "Bricolage Grotesque", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --measure: 62ch;
+  --measure: 60ch;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0E1422; --surface: #161E31; --ink: #E9EDF5; --ink-2: #A9B2C6; --ink-3: #7F89A1;
     --line: #2A3449; --accent: #86A4FF; --accent-soft: #1C2A4D; --on-accent: #0E1422;
-    --c-ml: #BF93EA; --c-de: #44C0C2; --c-viz: #F0B04E; --c-da: #F27F96;
+    --c-viz: #C97F26; --c-de: #1A9DA4; --c-da: #E0607F; --c-ml: #9A74D8;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0E1422; --surface: #161E31; --ink: #E9EDF5; --ink-2: #A9B2C6; --ink-3: #7F89A1;
   --line: #2A3449; --accent: #86A4FF; --accent-soft: #1C2A4D; --on-accent: #0E1422;
-  --c-ml: #BF93EA; --c-de: #44C0C2; --c-viz: #F0B04E; --c-da: #F27F96;
+  --c-viz: #C97F26; --c-de: #1A9DA4; --c-da: #E0607F; --c-ml: #9A74D8;
   color-scheme: dark;
 }
 
@@ -49,156 +59,164 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.55;
-  font-variant-numeric: tabular-nums;
-  -webkit-font-smoothing: antialiased;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.5;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
 }
-body::before {
-  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
-  background: var(--bg); z-index: 10;
-}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 10; }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; margin: 0; text-wrap: balance; }
 h2 { font-size: clamp(1.7rem, 1.2rem + 1.6vw, 2.3rem); font-weight: 700; letter-spacing: -0.01em; }
-h3 { font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem); font-weight: 700; }
+h3 { font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.7rem); font-weight: 700; }
 p { margin: 0; }
-ul { margin: 0; padding-left: 1.2em; }
-li + li { margin-top: 0.45em; }
+ul { margin: 0; padding-left: 1.15em; }
+li + li { margin-top: 0.4em; }
+svg text { font-family: var(--font-body); }
 
 .wrap {
-  max-width: 1080px; margin: 0 auto;
+  max-width: 1120px; margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
 /* Top bar */
-.top {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
-}
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; flex-wrap: wrap; }
 .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
 .top nav { display: flex; gap: 4px 18px; flex-wrap: wrap; }
 .top nav a { color: var(--ink-2); text-decoration: none; font-size: 0.95rem; font-weight: 600; }
 .top nav a:hover { color: var(--ink); }
 
-/* Hero */
-.hero .wrap {
-  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 32px 48px; align-items: center; padding-block: 56px 48px;
-}
-.hero-text { min-width: 0; }
-.hero h1 {
-  font-size: clamp(2.6rem, 1.6rem + 4.2vw, 4.6rem); font-weight: 700; letter-spacing: -0.025em;
-  font-variation-settings: "opsz" 96;
-}
-.kicker { color: var(--ink-2); font-weight: 600; margin-bottom: 14px; }
-.lead { font-size: 1.2rem; line-height: 1.5; max-width: var(--measure); margin-top: 22px; color: var(--ink); }
-.lead + .lead { margin-top: 14px; font-size: 1.05rem; color: var(--ink-2); }
-.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-.btn {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px;
-  font-weight: 600; text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--surface);
-}
+/* The stage: one deliberate dark look in both themes */
+.stage { background: var(--stage); color: var(--stage-ink); color-scheme: dark; }
+.stage .wrap { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 28px 44px; padding-block: 48px 40px; align-items: start; }
+.stage-text { min-width: 0; }
+.stage h1 { font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.1rem); font-weight: 700; letter-spacing: -0.025em; font-variation-settings: "opsz" 96; }
+.kicker { color: var(--stage-ink-2); font-weight: 600; margin-bottom: 12px; }
+.lead { font-size: 1.12rem; line-height: 1.5; margin-top: 18px; color: var(--stage-ink); max-width: 34ch; }
+.lead + .lead { margin-top: 12px; font-size: 1rem; color: var(--stage-ink-2); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: 999px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
 .btn:hover { border-color: var(--ink-3); }
 .btn-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.btn-primary:hover { border-color: var(--accent); filter: brightness(1.06); }
+.stage .btn { background: transparent; color: var(--stage-ink); border-color: var(--stage-line); }
+.stage .btn:hover { border-color: var(--stage-ink-2); }
+.stage .btn-primary { background: var(--stage-ink); color: var(--stage); border-color: var(--stage-ink); }
+.stage .btn-primary:hover { border-color: var(--stage-ink); }
+.how { margin: 0 0 12px; color: var(--stage-ink-2); font-size: 0.95rem; max-width: 70ch; }
 
-.map { min-width: 0; margin: 0; justify-self: center; width: 100%; max-width: 520px; }
-.map svg { display: block; width: 100%; height: auto; max-width: 100%; }
-.map figcaption { margin-top: 10px; font-size: 0.92rem; color: var(--ink-2); }
-.map-status { min-height: 1.5em; font-weight: 600; color: var(--ink); }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 0.9rem; color: var(--ink-2); list-style: none; padding: 0; }
-.legend li { display: inline-flex; align-items: center; gap: 7px; }
-.legend li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); }
+.stage-map { min-width: 0; }
+.lenses { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; padding: 0; list-style: none; }
+.lens { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--stage-line); background: transparent; color: var(--stage-ink); font: 600 0.86rem var(--font-body); cursor: pointer; }
+.lens::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--lc, var(--stage-ink-2)); flex: none; }
+.lens:hover { border-color: var(--stage-ink-2); }
+.lens[aria-pressed="true"] { background: var(--lc, var(--stage-ink-2)); border-color: var(--lc, var(--stage-ink-2)); color: var(--stage); }
+.lens[aria-pressed="true"]::before { background: var(--stage); }
+.lens-sep { width: 1px; background: var(--stage-line); margin: 4px 4px; }
+.map-box { position: relative; background: var(--stage-2); border: 1px solid var(--stage-line); border-radius: 18px; overflow: hidden; }
+.map-box svg { display: block; width: 100%; height: auto; max-width: 100%; }
 .node { cursor: pointer; }
-.node circle { transition: stroke-width 120ms; }
-.node:hover circle, .node:focus-visible circle { stroke: var(--ink); stroke-width: 2.5; }
+.node circle.body { stroke: var(--stage); stroke-width: 2; transition: fill-opacity 160ms; }
+.node.dim circle.body { fill-opacity: 0.22; }
+.node.dim text { opacity: 0.3; }
+.node:hover circle.body, .node:focus-visible circle.body, .node.selected circle.body { stroke: var(--stage-ink); stroke-width: 2.5; }
 .node:focus-visible { outline: none; }
-.node text { font-family: var(--font-display); font-weight: 700; fill: var(--on-accent); pointer-events: none; }
-.group-ring { fill: var(--grp); fill-opacity: 0.13; stroke: var(--grp); stroke-opacity: 0.55; stroke-width: 1; }
+.node text { font-family: var(--font-display); font-weight: 700; fill: var(--stage); pointer-events: none; }
+.node.dim { transition: opacity 160ms; }
+.setpath { fill-opacity: 0.2; stroke-width: 1.6; stroke-linejoin: round; pointer-events: none; }
+.hover-tip { position: absolute; pointer-events: none; background: var(--stage-ink); color: var(--stage); font-size: 0.85rem; font-weight: 600; padding: 4px 9px; border-radius: 7px; transform: translate(-50%, calc(-100% - 10px)); white-space: nowrap; max-width: 90%; text-overflow: ellipsis; overflow: hidden; }
+.hover-tip[hidden] { display: none; }
+.map-hint { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; font-size: 0.82rem; color: var(--stage-ink-2); pointer-events: none; }
+
+.detail { margin-top: 12px; border: 1px solid var(--stage-line); border-radius: 14px; padding: 16px 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: start; min-height: 128px; }
+.detail .d-title { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; line-height: 1.15; }
+.detail .d-meta { color: var(--stage-ink-2); font-size: 0.92rem; margin-top: 3px; }
+.detail .d-line { margin-top: 8px; max-width: 60ch; }
+.detail .d-tools { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; }
+.detail .d-tools span { font-size: 0.8rem; border: 1px solid var(--stage-line); color: var(--stage-ink-2); padding: 2px 8px; border-radius: 999px; }
+.detail .d-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 4px; font-size: 0.95rem; }
+.detail a { color: var(--stage-ink); }
+.detail .d-award { color: var(--s-viz); font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
 
 /* Sections */
 section { border-top: 1px solid var(--line); }
-section .wrap { padding-block: 56px; }
-.section-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-bottom: 36px; max-width: var(--measure); }
+section .wrap { padding-block: 52px; }
+.section-head { margin-bottom: 30px; max-width: var(--measure); display: grid; gap: 8px; }
 .section-head p { color: var(--ink-2); font-size: 1.05rem; }
 
-/* Featured projects */
-.proj { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 20px 48px; padding-block: 36px; border-top: 1px solid var(--line); }
+/* Featured projects: picture left, words right */
+.proj { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; padding-block: 40px; border-top: 1px solid var(--line); align-items: start; }
 .proj:first-of-type { border-top: 0; padding-top: 0; }
-.proj-head { min-width: 0; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.chip {
-  font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;
-  color: var(--chip); border: 1px solid var(--chip); background: color-mix(in srgb, var(--chip) 10%, transparent);
-}
+.proj-visual { min-width: 0; display: grid; gap: 18px; }
+.figure { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px 12px; }
+.figure svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.figure .cap { font-size: 0.86rem; color: var(--ink-2); margin-top: 8px; }
+.proj-text { min-width: 0; max-width: var(--measure); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.chip { font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; color: var(--chip); border: 1px solid var(--chip); background: color-mix(in srgb, var(--chip) 10%, transparent); }
 .chip-ml { --chip: var(--c-ml); } .chip-de { --chip: var(--c-de); } .chip-viz { --chip: var(--c-viz); } .chip-da { --chip: var(--c-da); }
-.proj-head .meta { color: var(--ink-2); margin-top: 10px; font-size: 0.98rem; }
-.proj-head .stack { margin-top: 18px; font-size: 0.92rem; color: var(--ink-2); line-height: 1.5; }
-.proj-head .stack strong { color: var(--ink); font-weight: 600; }
-.proj-head .links { margin-top: 12px; font-size: 0.95rem; }
-.proj-body { min-width: 0; max-width: var(--measure); }
-.proj-body > p { font-size: 1.08rem; }
-.proj-body ul { margin-top: 16px; }
-.proj-body li { padding-left: 2px; }
-.figures { display: flex; flex-wrap: wrap; gap: 18px 36px; margin: 22px 0 0; padding: 18px 0 0; border-top: 1px dashed var(--line); }
+.proj-text .meta { color: var(--ink-2); margin-top: 8px; font-size: 0.98rem; }
+.proj-text .intro { margin-top: 16px; font-size: 1.08rem; }
+.proj-text ul { margin-top: 14px; }
+.figures { display: flex; flex-wrap: wrap; gap: 14px 32px; margin: 20px 0 0; padding: 16px 0 0; border-top: 1px dashed var(--line); }
 .figures div { display: flex; flex-direction: column; min-width: 0; }
-.figures dt { order: 2; font-size: 0.88rem; color: var(--ink-2); }
+.figures dt { order: 2; font-size: 0.86rem; color: var(--ink-2); }
 .figures dd { order: 1; margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; line-height: 1.1; letter-spacing: -0.01em; }
+details { margin-top: 16px; }
+summary { cursor: pointer; font-weight: 600; color: var(--accent); list-style: none; display: inline-flex; align-items: center; gap: 8px; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform 120ms; margin-left: 2px; }
+details[open] summary::before { transform: rotate(45deg); }
+details ul { margin-top: 12px; }
+.stack { margin-top: 16px; font-size: 0.92rem; color: var(--ink-2); }
+.stack strong { color: var(--ink); font-weight: 600; }
+.links { margin-top: 8px; font-size: 0.95rem; display: flex; gap: 16px; flex-wrap: wrap; }
 
 /* More projects */
 .more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; list-style: none; padding: 0; margin: 0; }
-.more li { padding-block: 16px; border-top: 1px solid var(--line); min-width: 0; }
+.more li { padding-block: 13px; border-top: 1px solid var(--line); min-width: 0; }
 .more li + li { margin-top: 0; }
 .more .name { font-weight: 600; display: block; }
-.more .what { color: var(--ink-2); display: block; margin-top: 3px; font-size: 0.97rem; }
-.more .tools { color: var(--ink-3); display: block; margin-top: 5px; font-size: 0.88rem; }
+.more .what { color: var(--ink-2); display: block; margin-top: 2px; font-size: 0.95rem; }
+.more .tools { color: var(--ink-3); display: block; margin-top: 4px; font-size: 0.86rem; }
 .more .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--dot); margin-right: 8px; vertical-align: 1px; }
-.more .repo { display: inline-block; margin-top: 6px; font-size: 0.9rem; }
+.more .repo { display: inline-block; margin-top: 5px; font-size: 0.88rem; }
 
-/* Experience and education: a dated list, in time order */
-.timeline { list-style: none; padding: 0; margin: 0; max-width: 820px; }
-.timeline li { display: grid; grid-template-columns: minmax(0, 170px) minmax(0, 1fr); gap: 6px 32px; padding-block: 20px; border-top: 1px solid var(--line); }
+/* Experience and education: dated, in time order */
+.timeline { list-style: none; padding: 0; margin: 0; }
+.timeline li { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 4px 28px; padding-block: 16px; border-top: 1px solid var(--line); }
 .timeline li:first-child { border-top: 0; padding-top: 0; }
 .timeline li + li { margin-top: 0; }
-.timeline .when { color: var(--ink-2); font-size: 0.98rem; padding-top: 3px; }
-.timeline .role { font-weight: 600; font-size: 1.08rem; }
+.timeline .when { color: var(--ink-2); font-size: 0.95rem; padding-top: 3px; }
+.timeline .role { font-weight: 600; font-size: 1.05rem; }
 .timeline .org { color: var(--ink-2); }
-.timeline .desc { margin-top: 8px; max-width: var(--measure); }
-.timeline .tools { margin-top: 6px; color: var(--ink-3); font-size: 0.9rem; }
-
-/* Awards and skills */
+.timeline .desc { margin-top: 6px; max-width: var(--measure); }
+.timeline .tools { margin-top: 4px; color: var(--ink-3); font-size: 0.88rem; }
 .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+
+/* Skills and awards */
+.skills { display: grid; gap: 14px; margin: 0; }
+.skills div { min-width: 0; }
+.skills dt { font-weight: 600; margin-bottom: 6px; }
+.skills dd { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.skills dd span { font-size: 0.86rem; border: 1px solid var(--line); background: var(--surface); padding: 3px 10px; border-radius: 999px; color: var(--ink); }
 .awards { list-style: none; padding: 0; margin: 0; }
-.awards li { padding-block: 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 64px) minmax(0, 1fr); gap: 16px; }
+.awards li { padding-block: 11px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 56px) minmax(0, 1fr); gap: 12px; }
 .awards li:first-child { border-top: 0; padding-top: 0; }
 .awards li + li { margin-top: 0; }
 .awards .year { color: var(--ink-2); }
-.awards .what { color: var(--ink-2); display: block; font-size: 0.95rem; }
-.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 32px; margin: 0; }
-.skills div { min-width: 0; }
-.skills dt { font-weight: 600; margin-bottom: 4px; }
-.skills dd { margin: 0; color: var(--ink-2); font-size: 0.98rem; }
+.awards .what { color: var(--ink-2); display: block; font-size: 0.93rem; }
 
 /* Contact */
-.contact .wrap { padding-block: 56px 72px; }
-.contact-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-.foot { color: var(--ink-3); font-size: 0.9rem; margin-top: 36px; }
+.contact .wrap { padding-block: 52px 72px; }
+.contact-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.foot { color: var(--ink-3); font-size: 0.9rem; margin-top: 32px; }
 
-@media (max-width: 860px) {
-  .hero .wrap { grid-template-columns: minmax(0, 1fr); padding-block: 40px 36px; }
-  .map { justify-self: start; }
-  .proj { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) {
+  .stage .wrap { grid-template-columns: minmax(0, 1fr); padding-block: 36px 32px; }
+  .lead { max-width: var(--measure); }
+  .proj { grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .two-col { grid-template-columns: minmax(0, 1fr); gap: 40px; }
 }
@@ -206,9 +224,11 @@ section .wrap { padding-block: 56px; }
   body { font-size: 16px; }
   .more { grid-template-columns: minmax(0, 1fr); }
   .timeline li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-  .skills { grid-template-columns: minmax(0, 1fr); }
-  .figures { gap: 14px 24px; }
+  .figures { gap: 12px 22px; }
   .figures dd { font-size: 1.45rem; }
+  .detail { grid-template-columns: minmax(0, 1fr); }
+  .detail .d-award { white-space: normal; }
+  .map-hint { display: none; }
 }
 </style>
 </head>
@@ -220,141 +240,242 @@ section .wrap { padding-block: 56px; }
     <nav aria-label="Sections">
       <a href="#projects">Projects</a>
       <a href="#experience">Experience</a>
-      <a href="#education">Education</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
 </header>
 
-<div class="hero" id="top">
+<div class="stage" id="top">
   <div class="wrap">
-    <div class="hero-text">
+    <div class="stage-text">
       <p class="kicker">Paris. Open to junior data roles across Europe.</p>
       <h1>Olha Baliasina</h1>
-      <p class="lead">I build data tools and I check every number in them. Pipelines, models and interactive charts, from messy source records to a screen someone can use.</p>
-      <p class="lead">In 2026 I finished the Erasmus Mundus master in Big Data Management and Analytics (BDMA) in Brussels, Barcelona and Paris. My master thesis at Inria is a visual analytics tool for the managers of a research centre. Its poster won the Best Poster Award at IEEE VIS 2026.</p>
+      <p class="lead">I build data tools and I check every number in them: pipelines, models and interactive charts.</p>
+      <p class="lead">Erasmus Mundus master in Big Data Management and Analytics, 2026. Master thesis at Inria: a visual analytics tool for the managers of a research centre, Best Poster Award at IEEE VIS 2026.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="#projects">See the projects</a>
+        <a class="btn btn-primary" href="#projects">Read the projects</a>
         <a class="btn" href="https://www.linkedin.com/in/olha-baliasina" rel="me">LinkedIn</a>
         <a class="btn" href="https://github.com/kvitka-dykogo-granatu" rel="me">GitHub</a>
       </div>
     </div>
 
-    <figure class="map" aria-labelledby="map-caption">
-      <svg id="project-map" viewBox="0 0 560 560" role="group" aria-label="Map of projects as packed circles, grouped by kind of work"></svg>
-      <figcaption id="map-caption">
-        <span class="map-status" id="map-status">Every circle is one project. Tap one to jump to it.</span>
-        <ul class="legend">
-          <li style="--dot: var(--c-viz)">Data visualization</li>
-          <li style="--dot: var(--c-ml)">Machine learning</li>
-          <li style="--dot: var(--c-de)">Data engineering</li>
-          <li style="--dot: var(--c-da)">Data analysis</li>
-        </ul>
-      </figcaption>
-    </figure>
+    <div class="stage-map">
+      <p class="how">Every circle is one project. Pick a lens and a bubble set outlines the projects that share it. Click a circle to read about it, or drag it around.</p>
+      <ul class="lenses" id="lenses" aria-label="Lenses"></ul>
+      <div class="map-box" id="map-box">
+        <svg id="project-map" viewBox="0 0 760 520" role="group" aria-label="Map of projects as circles, grouped by kind of work"></svg>
+        <div class="hover-tip" id="hover-tip" hidden></div>
+        <div class="map-hint">Drag circles. Click one to read about it.</div>
+      </div>
+      <div class="detail" id="detail" aria-live="polite"></div>
+    </div>
   </div>
 </div>
 
 <section id="projects">
   <div class="wrap">
     <div class="section-head">
-      <h2>Projects</h2>
-      <p>Three in detail, then the rest in short. Every number below comes from the thesis, the slides or the notebooks of that project.</p>
+      <h2>Three projects in detail</h2>
+      <p>Each one with a drawing of what I built and the numbers from the thesis, the slides or the notebooks.</p>
     </div>
 
     <article class="proj" id="p-xray">
-      <div class="proj-head">
+      <div class="proj-visual">
+        <div class="figure">
+          <svg viewBox="0 0 560 330" role="img" aria-label="Schema: four sources flow into a DuckDB warehouse with four layers and build checks, then into a browser tool">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink-3)"/></marker>
+            </defs>
+            <g font-size="11" fill="var(--ink)">
+              <text x="10" y="18" font-weight="600" fill="var(--ink-2)">Four sources</text>
+              <g>
+                <rect x="10" y="30" width="150" height="54" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+                <text x="22" y="52" font-weight="600">Team registry</text><text x="22" y="70" fill="var(--ink-2)">961 rows, 84 teams</text>
+                <rect x="10" y="94" width="150" height="54" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+                <text x="22" y="116" font-weight="600">Activity reports</text><text x="22" y="134" fill="var(--ink-2)">4,534 yearly files</text>
+                <rect x="10" y="158" width="150" height="54" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+                <text x="22" y="180" font-weight="600">Publication archive</text><text x="22" y="198" fill="var(--ink-2)">16,208 records</text>
+                <rect x="10" y="222" width="150" height="54" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+                <text x="22" y="244" font-weight="600">National thesis platform</text><text x="22" y="262" fill="var(--ink-2)">1,077 theses</text>
+              </g>
+              <g stroke="var(--ink-3)" stroke-width="1.4" fill="none" marker-end="url(#arr)">
+                <path d="M160 57 C 185 57, 185 110, 206 110"/>
+                <path d="M160 121 C 185 121, 185 130, 206 130"/>
+                <path d="M160 185 C 185 185, 185 150, 206 150"/>
+                <path d="M160 249 C 185 249, 185 170, 206 170"/>
+              </g>
+              <text x="208" y="18" font-weight="600" fill="var(--ink-2)">One DuckDB warehouse</text>
+              <g>
+                <rect x="208" y="30" width="150" height="220" rx="10" fill="var(--bg)" stroke="var(--line)"/>
+                <rect x="218" y="40" width="130" height="44" rx="6" fill="var(--accent-soft)"/><text x="228" y="58" font-weight="600">raw</text><text x="228" y="75" fill="var(--ink-2)">what arrived, dated</text>
+                <rect x="218" y="92" width="130" height="44" rx="6" fill="var(--accent-soft)"/><text x="228" y="110" font-weight="600">staging</text><text x="228" y="127" fill="var(--ink-2)">typed and cleaned</text>
+                <rect x="218" y="144" width="130" height="44" rx="6" fill="var(--accent-soft)"/><text x="228" y="162" font-weight="600">core</text><text x="228" y="179" fill="var(--ink-2)">6 dimensions, 7 facts</text>
+                <rect x="218" y="196" width="130" height="44" rx="6" fill="var(--accent-soft)"/><text x="228" y="214" font-weight="600">marts</text><text x="228" y="231" fill="var(--ink-2)">under 2,000 rows</text>
+              </g>
+              <g>
+                <rect x="200" y="262" width="166" height="48" rx="8" fill="none" stroke="var(--accent)" stroke-dasharray="4 3"/>
+                <text x="212" y="282" font-weight="600" fill="var(--accent)">38 checks on every build</text>
+                <text x="212" y="299" fill="var(--ink-2)">one command, 154 s median</text>
+              </g>
+              <path d="M358 140 C 380 140, 380 140, 404 140" stroke="var(--ink-3)" stroke-width="1.4" fill="none" marker-end="url(#arr)"/>
+              <text x="406" y="18" font-weight="600" fill="var(--ink-2)">Browser tool, no server</text>
+              <g>
+                <rect x="406" y="30" width="144" height="110" rx="10" fill="var(--bg)" stroke="var(--line)"/>
+                <path d="M 448 52 C 436 48, 426 60, 432 72 C 428 84, 446 98, 462 92 C 478 100, 494 86, 486 74 C 494 60, 480 48, 466 52 C 460 46, 452 48, 448 52 Z" fill="var(--c-viz)" fill-opacity="0.16" stroke="var(--c-viz)" stroke-width="1.2"/>
+                <circle cx="446" cy="62" r="9" fill="var(--c-ml)"/><circle cx="468" cy="64" r="11" fill="var(--c-ml)"/><circle cx="440" cy="84" r="7" fill="var(--c-de)"/><circle cx="462" cy="88" r="9" fill="var(--c-ml)"/><circle cx="484" cy="80" r="7" fill="var(--c-de)"/>
+                <circle cx="510" cy="60" r="8" fill="var(--c-da)"/><circle cx="526" cy="80" r="11" fill="var(--c-viz)"/><circle cx="506" cy="96" r="7" fill="var(--c-da)"/><circle cx="530" cy="110" r="8" fill="var(--c-de)"/><circle cx="446" cy="116" r="8" fill="var(--c-viz)"/><circle cx="480" cy="118" r="10" fill="var(--c-ml)"/>
+              </g>
+              <text x="406" y="162" fill="var(--ink)">Every circle is one team.</text>
+              <text x="406" y="178" fill="var(--ink)">Bubble sets: observed themes.</text>
+              <text x="406" y="202" fill="var(--ink-2)">Team view. Comparison.</text>
+              <text x="406" y="218" fill="var(--ink-2)">Collaboration circle.</text>
+              <text x="406" y="246" fill="var(--ink-2)">Missing is shown as missing,</text>
+              <text x="406" y="262" fill="var(--ink-2)">never as zero. Every number</text>
+              <text x="406" y="278" fill="var(--ink-2)">says which years it covers.</text>
+            </g>
+          </svg>
+          <p class="cap">What I built: the data flow from four administrative sources to one interface.</p>
+        </div>
+      </div>
+      <div class="proj-text">
         <div class="chips"><span class="chip chip-viz">Data visualization</span><span class="chip chip-de">Data engineering</span><span class="chip chip-ml">Machine learning</span></div>
         <h3>X-Raying a Research Institute</h3>
-        <p class="meta">Master thesis in the AVIZ team at Inria Saclay, April to September 2026. Supervised by Petra Isenberg and Jean-Daniel Fekete. Best Poster Award, IEEE VIS 2026.</p>
-        <p class="stack"><strong>Built with</strong> Python, SQL in DuckDB, JavaScript and D3 v7, a locally run language model (Qwen 3.6), NMF topic modelling, uv.</p>
-        <p class="links"><a href="https://doi.org/10.5281/zenodo.22166133">Poster on Zenodo</a></p>
-      </div>
-      <div class="proj-body">
-        <p>The managers of the Inria Saclay research centre keep their records in four systems built for other purposes: a team registry, annual activity reports, the national publication archive and the national thesis platform. I merged them into one data warehouse and built a browser tool on top of it, so the managers can explore 76 research teams, their members and their publications from 2008 to 2024. The tool runs behind Inria's login and needs no server.</p>
+        <p class="meta">Master thesis, AVIZ team at Inria Saclay, April to September 2026. Supervised by Petra Isenberg and Jean-Daniel Fekete. Best Poster Award, IEEE VIS 2026.</p>
+        <p class="intro">The managers of a research centre wanted to see their 76 teams over time: members, publications, collaborations. The records sat in four systems that did not agree on names or identifiers. I merged them into one warehouse and built the tool on top.</p>
         <ul>
-          <li>Wrote one parser per source and loaded 4,534 activity reports, 16,208 publication records and 1,077 doctoral theses into a DuckDB warehouse with raw, staging, core and mart layers.</li>
-          <li>Wrote the matching rules for teams, people and institutions in SQL. An author counts as matched only when team membership in the same year confirms the name match: 20,432 confirmed links out of 35,269 candidate pairs. The rule was to under-credit, never to mis-credit.</li>
-          <li>Added 22 assertions, table checksums and a planted-violation test to every build. One command rebuilds everything in a median of 154 seconds, and a build replaces the live warehouse only after every check passes.</li>
-          <li>Compared a local language model (Qwen 3.6) with an NMF topic model for sorting 12,027 publications into the institute's 14 themes. I judged both on three signals neither model had seen, with 95% intervals from 300 bootstrap resamples. The language model's themes matched the teams' declared themes for 61.7% of team–publication pairs, against 47.4% for NMF.</li>
-          <li>Designed and built the interface in D3: a circle-packed overview of the centre, a team view, a comparison of selected teams and a collaboration circle. Every number states the years it covers, and a missing value is shown as missing, never as zero.</li>
-          <li>Ran the requirements study (a survey and a card-sorting workshop with 8 committee members) and the evaluation: both centre managers finished a task from their own work without help, and 5 researchers rated the tool between 5.3 and 5.7 out of 7 on the ICE-T questionnaire.</li>
+          <li>Matching rules in SQL for teams, people and institutions. An author counts as matched only when team membership in the same year confirms the name: 20,432 confirmed links out of 35,269 candidates. Under-credit, never mis-credit.</li>
+          <li>Every build runs 22 assertions, checksums and a planted violation. A failed build never reaches the tool.</li>
+          <li>A local language model (Qwen 3.6) against an NMF topic model for sorting 12,027 publications into 14 themes, judged on signals neither model had seen. The language model's themes matched the declared themes for 61.7% of pairs; NMF reached 47.4%.</li>
         </ul>
         <dl class="figures">
-          <div><dt>research teams, 2008 to 2024</dt><dd>76</dd></div>
-          <div><dt>publication records merged</dt><dd>16,208</dd></div>
-          <div><dt>one-command rebuild, median</dt><dd>154 s</dd></div>
+          <div><dt>teams, 2008 to 2024</dt><dd>76</dd></div>
+          <div><dt>publication records</dt><dd>16,208</dd></div>
+          <div><dt>managers who finished a real task without help</dt><dd>2 of 2</dd></div>
         </dl>
+        <details>
+          <summary>More detail</summary>
+          <ul>
+            <li>One parser per source. Each download goes into a dated file that is never changed afterwards. Python only decodes; everything else is SQL inside DuckDB.</li>
+            <li>One command rebuilds the warehouse in a median of 154 seconds. A build replaces the live one only after every check passes. The safe swap caught two failed builds.</li>
+            <li>The interface: a circle-packed overview, a team view, a comparison of selected teams and a collaboration circle, in one HTML file with D3. Deployed behind Inria's login.</li>
+            <li>Requirements study with the centre's project committee: a survey (6 answers) and a 25-minute card-sorting workshop (8 people in 3 groups), turned into 7 requirements.</li>
+            <li>Evaluation: two one-hour sessions with centre managers, plus 5 researchers on the ICE-T questionnaire (means 5.26 to 5.67 out of 7). One manager found a real bug; my audit found two more of the same kind.</li>
+          </ul>
+        </details>
+        <p class="stack"><strong>Built with</strong> Python, SQL in DuckDB, JavaScript, D3 v7, Qwen 3.6, NMF, uv.</p>
+        <p class="links"><a href="https://doi.org/10.5281/zenodo.22166133">Poster on Zenodo</a></p>
       </div>
     </article>
 
     <article class="proj" id="p-birds">
-      <div class="proj-head">
+      <div class="proj-visual">
+        <div class="figure">
+          <svg id="chart-birds" viewBox="0 0 560 250" role="img" aria-label="Bar chart: private leaderboard score at each step, from 48% with a frozen ResNet-50 to 92% with the full EVA-02 pipeline"></svg>
+          <p class="cap">Private leaderboard score at each step. One bar is one submission; the last one won.</p>
+        </div>
+        <div class="figure">
+          <svg viewBox="0 0 560 96" role="img" aria-label="Schema: photo, bird detector, full image and crop, EVA-02 trained on five folds, blend with specialist models, species">
+            <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink-3)"/></marker></defs>
+            <g font-size="11" fill="var(--ink)">
+              <rect x="6" y="22" width="62" height="52" rx="8" fill="var(--bg)" stroke="var(--line)"/><text x="37" y="45" text-anchor="middle" font-weight="600">Photo</text><text x="37" y="62" text-anchor="middle" fill="var(--ink-2)">400 test</text>
+              <rect x="86" y="22" width="108" height="52" rx="8" fill="var(--bg)" stroke="var(--line)"/><text x="140" y="42" text-anchor="middle" font-weight="600">Bird detector</text><text x="140" y="57" text-anchor="middle" fill="var(--ink-2)">YOLOv8, then</text><text x="140" y="70" text-anchor="middle" fill="var(--ink-2)">Grounding DINO</text>
+              <rect x="212" y="22" width="88" height="52" rx="8" fill="var(--bg)" stroke="var(--line)"/><text x="256" y="42" text-anchor="middle" font-weight="600">Two views</text><text x="256" y="57" text-anchor="middle" fill="var(--ink-2)">full image</text><text x="256" y="70" text-anchor="middle" fill="var(--ink-2)">and bird crop</text>
+              <rect x="318" y="22" width="100" height="52" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="368" y="42" text-anchor="middle" font-weight="600">EVA-02 Large</text><text x="368" y="57" text-anchor="middle" fill="var(--ink-2)">5 folds, 4 test</text><text x="368" y="70" text-anchor="middle" fill="var(--ink-2)">views each</text>
+              <rect x="436" y="22" width="78" height="52" rx="8" fill="var(--bg)" stroke="var(--line)"/><text x="475" y="42" text-anchor="middle" font-weight="600">Blend</text><text x="475" y="57" text-anchor="middle" fill="var(--ink-2)">+ 3 specialist</text><text x="475" y="70" text-anchor="middle" fill="var(--ink-2)">pair models</text>
+              <text x="546" y="52" text-anchor="end" font-weight="600">1 of 20</text>
+              <g stroke="var(--ink-3)" stroke-width="1.4" fill="none" marker-end="url(#arr2)">
+                <path d="M68 48 L84 48"/><path d="M194 48 L210 48"/><path d="M300 48 L316 48"/><path d="M418 48 L434 48"/>
+              </g>
+            </g>
+          </svg>
+          <p class="cap">The final pipeline, left to right.</p>
+        </div>
+      </div>
+      <div class="proj-text">
         <div class="chips"><span class="chip chip-ml">Machine learning</span></div>
         <h3>Fine-grained bird species classification</h3>
         <p class="meta">Class Kaggle competition, Machine Learning course, CentraleSupélec, January to February 2026. Team of two; I built the whole pipeline.</p>
-        <p class="stack"><strong>Built with</strong> PyTorch, timm, YOLOv8, Grounding DINO, Hugging Face Transformers, Albumentations, OpenCV, scikit-learn, Google Colab.</p>
-      </div>
-      <div class="proj-body">
-        <p>Recognise 20 bird species from photos, with about 60 photos per species and 1,212 labelled images in total. Some pairs look almost the same, like the American Crow and the Fish Crow. Our team finished 1st on the private leaderboard with 92% accuracy; 2nd place had 88%.</p>
+        <p class="intro">20 bird species, about 60 photos each, and some pairs that look the same even to a human. We finished 1st on the private leaderboard with 92% accuracy. 2nd place had 88%.</p>
         <ul>
-          <li>Started with baselines to see what matters. A frozen ResNet-50 scored 48%; fine-tuning it gave about 70%.</li>
-          <li>Compared four backbones in the same simple pipeline. EVA-02 Large, a Vision Transformer pretrained on iNaturalist photos of living species, beat ConvNeXt-Base by 4 points. Everything added after it gave 2 more points.</li>
-          <li>Added bird detection (YOLOv8, with Grounding DINO as a fallback for the 13 test photos YOLO missed), 5-fold cross-validation on all 1,212 images (96.95% ± 0.43%) and test-time augmentation with 4 views per photo.</li>
-          <li>Kept a 304-million-parameter model from overfitting on 1,212 images: a tiny learning rate for the backbone, a faster one for the new head, warm-up, label smoothing, Mixup and CutMix, early stopping.</li>
-          <li>Traced 78% of the remaining errors to two look-alike pairs with a confusion matrix, and trained small specialist classifiers that step in only when the main model hesitates between the pair.</li>
-          <li>Ran experiments one change at a time, with the same folds and seed, and logged every run. Dropped weight averaging and model soup when the numbers did not hold up.</li>
+          <li>Baselines first. A frozen ResNet-50 scored 48%, fine-tuned about 70%. EVA-02 Large, pretrained on iNaturalist photos of living species, beat ConvNeXt-Base by 4 points in the same pipeline. Everything after it gave 2 more.</li>
+          <li>5-fold cross-validation on all 1,212 images (96.95% ± 0.43%) replaced a 103-image validation split, because one image moved the score by a full point.</li>
+          <li>A confusion matrix traced 78% of the remaining errors to two look-alike pairs. Small specialist models step in when the main model hesitates between them.</li>
         </ul>
         <dl class="figures">
           <div><dt>on the private leaderboard</dt><dd>1st</dd></div>
           <div><dt>accuracy (2nd place: 88%)</dt><dd>92%</dd></div>
-          <div><dt>from first baseline to final model</dt><dd>48% → 92%</dd></div>
+          <div><dt>training images</dt><dd>1,212</dd></div>
         </dl>
+        <details>
+          <summary>More detail</summary>
+          <ul>
+            <li>Bird detection with YOLOv8, and Grounding DINO with text prompts for the 13 test photos YOLO missed. Boxes computed once and cached.</li>
+            <li>A 304-million-parameter model on 1,212 images: a tiny learning rate for the backbone, a faster one for the new head, warm-up, label smoothing, Mixup and CutMix, gradient clipping, early stopping.</li>
+            <li>Test-time augmentation with 4 views per photo (original, flipped, zoomed, both). Logits averaged.</li>
+            <li>Experiments one change at a time, with the same folds and seed, every run logged. Weight averaging and model soup did not hold up and were dropped. The specialists changed 3 of 400 test predictions: one image on the public score, nothing on the private one.</li>
+          </ul>
+        </details>
+        <p class="stack"><strong>Built with</strong> PyTorch, timm, YOLOv8, Grounding DINO, Hugging Face Transformers, Albumentations, OpenCV, scikit-learn, Google Colab.</p>
       </div>
     </article>
 
     <article class="proj" id="p-satellite">
-      <div class="proj-head">
+      <div class="proj-visual">
+        <div class="figure">
+          <svg id="chart-sat" viewBox="0 0 560 260" role="img" aria-label="Bar chart: mean IoU on 837 test tiles. Methods without labels reach 0.23 to 0.37; pretrained networks reach 0.78 to 0.80"></svg>
+          <p class="cap">Mean IoU on the same 837 test tiles. IoU is the overlap between predicted and true building pixels, 0 to 1.</p>
+        </div>
+      </div>
+      <div class="proj-text">
         <div class="chips"><span class="chip chip-ml">Machine learning</span></div>
         <h3>Building segmentation on satellite images</h3>
         <p class="meta">Bachelor thesis, Igor Sikorsky Kyiv Polytechnic Institute, February to June 2024. Grade 95 of 100.</p>
+        <p class="intro">How far can you get without labels, and how much better are pretrained networks, on the same satellite tiles and the same metrics? Three label-free methods against U-Net, U-Net++ and FPN.</p>
+        <ul>
+          <li>8,366 tiles from the Mapping Challenge dataset with 71,871 building outlines, turned into pixel masks and split 8:1:1.</li>
+          <li>The networks, with ImageNet-pretrained ResNet-50 encoders and Dice loss, reached about 0.80 IoU. The best label-free method reached 0.37, and that score used the true masks to pick the right cluster, so it is an upper bound.</li>
+          <li>Found later, while reviewing the code: a modified network with dilated convolutions was never switched on, so its small gain was noise. Since then I check that a change is really in the model before I compare numbers.</li>
+        </ul>
+        <dl class="figures">
+          <div><dt>IoU, pretrained networks</dt><dd>0.80</dd></div>
+          <div><dt>IoU, best without labels</dt><dd>0.37</dd></div>
+          <div><dt>satellite tiles</dt><dd>8,366</dd></div>
+        </dl>
+        <details>
+          <summary>More detail</summary>
+          <ul>
+            <li>K-Means and Fuzzy C-Means with 3 clusters; each cluster became a candidate mask. Morphological active contours sometimes selected everything except the buildings, so each mask was compared with its inverse: 0.23 to 0.37 mean IoU.</li>
+            <li>Training on a Kaggle P100 GPU within 30 free hours a week: 320 × 320 tiles, Adam, learning rate 1e-4, batch 16, 10 to 15 epochs, model chosen on validation IoU.</li>
+            <li>Why IoU and not accuracy: most pixels are background, so a model that predicts no buildings still scores 0.96 accuracy.</li>
+          </ul>
+        </details>
         <p class="stack"><strong>Built with</strong> PyTorch, segmentation-models-pytorch, Torchvision, Albumentations, OpenCV, scikit-image, scikit-fuzzy, scikit-learn, Kaggle.</p>
         <p class="links"><a href="https://github.com/kvitka-dykogo-granatu/Satellite-image-segmentation">Code on GitHub</a></p>
       </div>
-      <div class="proj-body">
-        <p>Find buildings on satellite photos. I compared three methods that need no labels (K-Means, Fuzzy C-Means and morphological active contours) with three pretrained segmentation networks (U-Net, U-Net++ and FPN), on the same photos and with the same metrics.</p>
-        <ul>
-          <li>Prepared 8,366 images from the Mapping Challenge dataset with 71,871 building outlines, turned the outlines into pixel masks and split the data 8:1:1 into training, validation and test sets.</li>
-          <li>Turned colour clusters and active-contour outputs into building masks, and scored every method with IoU, Dice and pixel accuracy on the same 837 test images.</li>
-          <li>Fine-tuned U-Net, U-Net++ and FPN with ImageNet-pretrained ResNet-50 encoders, with Dice loss, on a Kaggle P100 GPU within 30 free hours a week.</li>
-          <li>The networks reached about 0.80 IoU. The best method without labels reached 0.37, and that figure used the true masks to pick the right cluster, so it is an upper bound.</li>
-          <li>Found later, while reviewing the code, that a modified network with dilated convolutions was never switched on, so its small gain was noise. Since then I check that a change is really in the model before I compare numbers.</li>
-        </ul>
-        <dl class="figures">
-          <div><dt>IoU with pretrained networks</dt><dd>0.80</dd></div>
-          <div><dt>IoU, best method without labels</dt><dd>0.37</dd></div>
-          <div><dt>satellite images</dt><dd>8,366</dd></div>
-        </dl>
-      </div>
     </article>
+  </div>
+</section>
 
-    <div class="section-head" style="margin-top: 56px; margin-bottom: 8px;">
-      <h3 id="more-projects">More projects</h3>
+<section id="more">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>More projects</h2>
+      <p>The smaller circles on the map. Click any of them up there for the short version.</p>
     </div>
     <ul class="more">
       <li id="p-scholamigo"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>ScholAmigo</span><span class="what">Scholarship recommender. Course project, BDMA master.</span><span class="tools">Airflow, PySpark, LLM-based parsing</span></li>
-      <li id="p-rnnlogic"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Knowledge graph completion with RNNLogic</span><span class="what">Big Data Research Project, BDMA master. Neurosymbolic reasoning on knowledge graphs: optimised the C++ rule miner, compared Mamba architectures, built dashboards for rule grounding.</span><span class="tools">C++, Python</span></li>
+      <li id="p-rnnlogic"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Knowledge graph completion with RNNLogic</span><span class="what">Big Data Research Project. Neurosymbolic reasoning on knowledge graphs: optimised the C++ rule miner, compared Mamba architectures, built dashboards for rule grounding.</span><span class="tools">C++, Python</span></li>
       <li id="p-ebiss"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Spatio-temporal streaming survey</span><span class="what">Poster at the eBISS 2025 summer school. Best Poster.</span><span class="tools">Research survey</span></li>
-      <li id="p-musical"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Musical Fingerprint</span><span class="what">Dashboard built from my own Spotify listening history. Personal project.</span><span class="tools">Streamlit, Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/musical_fingerprint">Code on GitHub</a></li>
-      <li id="p-vitality"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Vitality</span><span class="what">Fitness dashboard built from 9 years of my own Google Fit data. Personal project.</span><span class="tools">Python</span></li>
+      <li id="p-musical"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Musical Fingerprint</span><span class="what">Dashboard built from my own Spotify listening history.</span><span class="tools">Streamlit, Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/musical_fingerprint">Code on GitHub</a></li>
+      <li id="p-vitality"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Vitality</span><span class="what">Fitness dashboard built from 9 years of my own Google Fit data.</span><span class="tools">Python</span></li>
       <li id="p-apartment"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Apartment-layout graph extraction</span><span class="what">Web app that turns an apartment floor plan into a graph.</span><span class="tools">Flask, JavaScript Canvas</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/floorplan_layout">Code on GitHub</a></li>
       <li id="p-spark"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Spark text analysis</span><span class="what">Course project, BDMA master.</span><span class="tools">Spark</span></li>
       <li id="p-nutri"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Nutri-Score classification</span><span class="what">Course project, BDMA master.</span><span class="tools">Python, machine learning</span></li>
       <li id="p-trees"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Tree-root prediction</span><span class="what">Course project.</span><span class="tools">Gradient boosting</span></li>
       <li id="p-voting"><span class="name"><span class="dot" style="--dot: var(--c-da)"></span>Voting theory implementations</span><span class="what">Course project, BDMA master.</span><span class="tools">Python</span></li>
       <li id="p-fairness"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Practical fairness in AI</span><span class="what">Course assignment, BDMA master.</span><span class="tools">Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/fairness_project">Code on GitHub</a></li>
-      <li id="p-agents"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Multi-agent research assistant</span><span class="what">Agents that searched and filed the literature for my thesis, with automated backups. Personal project.</span><span class="tools">Claude Code, Zotero, Semantic Scholar</span></li>
+      <li id="p-agents"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Multi-agent research assistant</span><span class="what">Agents that searched and filed the literature for my thesis, with automated backups.</span><span class="tools">Claude Code, Zotero, Semantic Scholar</span></li>
       <li id="p-code4ukraine"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Code4Ukraine 2022</span><span class="what">Hackathon, 1st place, team lead. A map and data pipeline for insulin availability.</span><span class="tools">Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/insulinewarriors">Code on GitHub</a></li>
       <li id="p-int20h"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>INT20H 2023</span><span class="what">Hackathon, 5th place. Taxi ride duration prediction.</span><span class="tools">Python, machine learning</span></li>
     </ul>
@@ -363,64 +484,61 @@ section .wrap { padding-block: 56px; }
 
 <section id="experience">
   <div class="wrap">
-    <div class="section-head">
-      <h2>Experience</h2>
+    <div class="two-col">
+      <div>
+        <div class="section-head"><h2>Experience</h2></div>
+        <ul class="timeline">
+          <li id="x-inria">
+            <span class="when">Apr to Sep 2026</span>
+            <div>
+              <div class="role">Thesis intern, AVIZ team</div>
+              <div class="org">Inria Saclay, France</div>
+              <p class="desc">Built and evaluated "X-Raying a Research Institute", above.</p>
+              <p class="tools">Python, SQL, DuckDB, JavaScript, D3</p>
+            </div>
+          </li>
+          <li id="x-ulb">
+            <span class="when">Jul to Aug 2025</span>
+            <div>
+              <div class="role">Research intern, MobilityDB</div>
+              <div class="org">Université libre de Bruxelles, Belgium</div>
+              <p class="desc">MobilityDB is an open-source database extension for moving objects. I worked on C++ functions for spatio-temporal stream processing.</p>
+              <p class="tools">C++, PostgreSQL</p>
+            </div>
+          </li>
+          <li id="x-gr8tech">
+            <span class="when">Mar to Dec 2023</span>
+            <div>
+              <div class="role">Junior DevOps Engineer</div>
+              <div class="org">GR8Tech, Kyiv, Ukraine</div>
+              <p class="desc">Monitoring and infrastructure for an iGaming platform.</p>
+              <p class="tools">Grafana, Prometheus, Kubernetes, Terraform, Docker, GitLab CI/CD, AWS (S3, RDS, EC2)</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="education">
+        <div class="section-head"><h2>Education</h2></div>
+        <ul class="timeline">
+          <li>
+            <span class="when">2024 to 2026</span>
+            <div>
+              <div class="role">Erasmus Mundus Joint Master in Big Data Management and Analytics (BDMA)</div>
+              <div class="org">Université libre de Bruxelles, Universitat Politècnica de Catalunya, CentraleSupélec (Université Paris-Saclay)</div>
+              <p class="desc">Thesis at Inria Saclay, defended in Barcelona in September 2026.</p>
+            </div>
+          </li>
+          <li>
+            <span class="when">2020 to 2024</span>
+            <div>
+              <div class="role">BSc in System Analysis</div>
+              <div class="org">Igor Sikorsky Kyiv Polytechnic Institute, Ukraine</div>
+              <p class="desc">GPA 97.34 of 100. Bachelor thesis on building segmentation, 95 of 100.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <ul class="timeline">
-      <li id="x-inria">
-        <span class="when">April to September 2026</span>
-        <div>
-          <div class="role">Thesis intern, AVIZ team</div>
-          <div class="org">Inria Saclay, France</div>
-          <p class="desc">Built and evaluated "X-Raying a Research Institute": a data warehouse and a visual analytics tool for the managers of the centre. See the project above.</p>
-          <p class="tools">Python, SQL, DuckDB, JavaScript, D3</p>
-        </div>
-      </li>
-      <li id="x-ulb">
-        <span class="when">July to August 2025</span>
-        <div>
-          <div class="role">Research intern, MobilityDB</div>
-          <div class="org">Université libre de Bruxelles, Belgium</div>
-          <p class="desc">Worked on MobilityDB, an open-source database extension for moving objects, and on C++ functions for spatio-temporal stream processing.</p>
-          <p class="tools">C++, PostgreSQL</p>
-        </div>
-      </li>
-      <li id="x-gr8tech">
-        <span class="when">March to December 2023</span>
-        <div>
-          <div class="role">Junior DevOps Engineer</div>
-          <div class="org">GR8Tech, Kyiv, Ukraine</div>
-          <p class="desc">Monitoring and infrastructure for an iGaming platform.</p>
-          <p class="tools">Grafana, Prometheus, Kubernetes, Terraform, Docker, GitLab CI/CD, AWS (S3, RDS, EC2)</p>
-        </div>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<section id="education">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>Education</h2>
-    </div>
-    <ul class="timeline">
-      <li>
-        <span class="when">2024 to 2026</span>
-        <div>
-          <div class="role">Erasmus Mundus Joint Master in Big Data Management and Analytics (BDMA)</div>
-          <div class="org">Université libre de Bruxelles, Universitat Politècnica de Catalunya, CentraleSupélec (Université Paris-Saclay)</div>
-          <p class="desc">Thesis at Inria Saclay, defended in Barcelona in September 2026.</p>
-        </div>
-      </li>
-      <li>
-        <span class="when">2020 to 2024</span>
-        <div>
-          <div class="role">BSc in System Analysis</div>
-          <div class="org">Igor Sikorsky Kyiv Polytechnic Institute, Ukraine</div>
-          <p class="desc">GPA 97.34 of 100. Bachelor thesis on building segmentation on satellite images, grade 95 of 100.</p>
-        </div>
-      </li>
-    </ul>
   </div>
 </section>
 
@@ -430,13 +548,13 @@ section .wrap { padding-block: 56px; }
       <div>
         <div class="section-head"><h2>Skills</h2></div>
         <dl class="skills">
-          <div><dt>Languages</dt><dd>Python, SQL, JavaScript, C++</dd></div>
-          <div><dt>Machine learning</dt><dd>PyTorch, timm, scikit-learn, Hugging Face Transformers, OpenCV, Albumentations, YOLOv8, segmentation-models-pytorch. Image classification and segmentation, Vision Transformers, gradient boosting, topic modelling, knowledge-graph embeddings.</dd></div>
-          <div><dt>Data engineering</dt><dd>DuckDB, Spark and PySpark, Airflow, PostgreSQL and MobilityDB, dimensional modelling, build checks and assertions.</dd></div>
-          <div><dt>Visualization and user research</dt><dd>D3.js, Streamlit, Plotly, Flask with JavaScript Canvas. Surveys, card sorting, think-aloud sessions, the ICE-T questionnaire.</dd></div>
-          <div><dt>DevOps and cloud</dt><dd>Docker, Kubernetes, Terraform, GitLab CI/CD, Grafana, Prometheus, AWS (S3, RDS, EC2).</dd></div>
-          <div><dt>Everyday tools</dt><dd>Git, Jupyter, Google Colab, Kaggle, uv, LaTeX, Claude Code, Zotero.</dd></div>
-          <div><dt>Spoken languages</dt><dd>Ukrainian (native), English (C1), German (A2 to B1), French (beginner).</dd></div>
+          <div><dt>Languages</dt><dd><span>Python</span><span>SQL</span><span>JavaScript</span><span>C++</span></dd></div>
+          <div><dt>Machine learning</dt><dd><span>PyTorch</span><span>timm</span><span>scikit-learn</span><span>Hugging Face Transformers</span><span>OpenCV</span><span>Albumentations</span><span>YOLOv8</span><span>Vision Transformers</span><span>Gradient boosting</span><span>Topic modelling</span><span>Knowledge-graph embeddings</span></dd></div>
+          <div><dt>Data engineering</dt><dd><span>DuckDB</span><span>Spark, PySpark</span><span>Airflow</span><span>PostgreSQL, MobilityDB</span><span>Dimensional modelling</span><span>Build checks and assertions</span></dd></div>
+          <div><dt>Visualization and user research</dt><dd><span>D3.js</span><span>Streamlit</span><span>Plotly</span><span>Flask + Canvas</span><span>Surveys</span><span>Card sorting</span><span>Think-aloud sessions</span><span>ICE-T questionnaire</span></dd></div>
+          <div><dt>DevOps and cloud</dt><dd><span>Docker</span><span>Kubernetes</span><span>Terraform</span><span>GitLab CI/CD</span><span>Grafana</span><span>Prometheus</span><span>AWS (S3, RDS, EC2)</span></dd></div>
+          <div><dt>Everyday tools</dt><dd><span>Git</span><span>Jupyter</span><span>Google Colab</span><span>Kaggle</span><span>uv</span><span>LaTeX</span><span>Claude Code</span><span>Zotero</span></dd></div>
+          <div><dt>Spoken languages</dt><dd><span>Ukrainian, native</span><span>English, C1</span><span>German, A2 to B1</span><span>French, beginner</span></dd></div>
         </dl>
       </div>
       <div>
@@ -457,13 +575,13 @@ section .wrap { padding-block: 56px; }
   <div class="wrap">
     <div class="section-head">
       <h2>Contact</h2>
-      <p>I am based in Paris and I am looking for a junior role in data science, data engineering, data visualization or data analysis, anywhere in Europe. The easiest way to reach me is LinkedIn.</p>
+      <p>I am in Paris and I am looking for a junior role in data science, data engineering, data visualization or data analysis, anywhere in Europe. The easiest way to reach me is LinkedIn.</p>
     </div>
     <div class="contact-row">
       <a class="btn btn-primary" href="https://www.linkedin.com/in/olha-baliasina" rel="me">Message me on LinkedIn</a>
       <a class="btn" href="https://github.com/kvitka-dykogo-granatu" rel="me">GitHub</a>
     </div>
-    <p class="foot">Olha Baliasina. Last updated October 2026.</p>
+    <p class="foot">Olha Baliasina. Last updated October 2026. The project map uses D3 and bubble sets, the same device as my thesis tool.</p>
   </div>
 </section>
 
@@ -471,84 +589,258 @@ section .wrap { padding-block: 56px; }
 <script>
 (function () {
   if (!window.d3) return;
-  var groups = [
-    { key: "viz", name: "Data visualization", color: "var(--c-viz)", children: [
-      { id: "p-xray", label: "X-Raying a Research Institute", short: "X-Ray", v: 3.2 },
-      { id: "p-musical", label: "Musical Fingerprint", v: 1 },
-      { id: "p-vitality", label: "Vitality", v: 1 },
-      { id: "p-apartment", label: "Apartment-layout graph extraction", v: 1 }
-    ]},
-    { key: "ml", name: "Machine learning", color: "var(--c-ml)", children: [
-      { id: "p-birds", label: "Fine-grained bird species classification", short: "Birds", v: 3.2 },
-      { id: "p-satellite", label: "Building segmentation on satellite images", short: "Satellite", v: 3.2 },
-      { id: "p-rnnlogic", label: "Knowledge graph completion with RNNLogic", v: 1 },
-      { id: "p-nutri", label: "Nutri-Score classification", v: 1 },
-      { id: "p-trees", label: "Tree-root prediction", v: 1 },
-      { id: "p-fairness", label: "Practical fairness in AI", v: 1 },
-      { id: "p-int20h", label: "INT20H 2023 hackathon", v: 1 }
-    ]},
-    { key: "de", name: "Data engineering", color: "var(--c-de)", children: [
-      { id: "p-scholamigo", label: "ScholAmigo", v: 1 },
-      { id: "p-spark", label: "Spark text analysis", v: 1 },
-      { id: "x-ulb", label: "MobilityDB research internship", v: 1 },
-      { id: "p-ebiss", label: "Spatio-temporal streaming survey", v: 1 },
-      { id: "p-agents", label: "Multi-agent research assistant", v: 1 },
-      { id: "p-code4ukraine", label: "Code4Ukraine 2022 hackathon", v: 1 }
-    ]},
-    { key: "da", name: "Data analysis", color: "var(--c-da)", children: [
-      { id: "p-voting", label: "Voting theory implementations", v: 1 }
-    ]}
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Data: one row per project. Facts from the Project Library. ---------- */
+  var KIND = {
+    viz: { name: "Data visualization", color: "var(--s-viz)" },
+    ml:  { name: "Machine learning",   color: "var(--s-ml)" },
+    de:  { name: "Data engineering",   color: "var(--s-de)" },
+    da:  { name: "Data analysis",      color: "var(--s-da)" }
+  };
+  var P = [
+    { id: "p-xray", name: "X-Raying a Research Institute", short: "X-Ray", kind: "viz", r: 50, featured: true,
+      meta: "Master thesis. AVIZ team, Inria Saclay. April to September 2026.",
+      line: "A data warehouse and a visual analytics tool for the managers of a research centre: 76 teams, their people and publications, 2008 to 2024.",
+      tools: ["Python", "SQL / DuckDB", "JavaScript", "D3.js", "Qwen 3.6", "NMF"], award: "Best Poster Award, IEEE VIS 2026",
+      links: [{ t: "Poster on Zenodo", u: "https://doi.org/10.5281/zenodo.22166133" }] },
+    { id: "p-birds", name: "Fine-grained bird species classification", short: "Birds", kind: "ml", r: 50, featured: true,
+      meta: "Class Kaggle competition, CentraleSupélec. January to February 2026.",
+      line: "20 bird species, about 60 photos each. 1st on the private leaderboard with 92% accuracy; 2nd place had 88%.",
+      tools: ["PyTorch", "timm", "YOLOv8", "Grounding DINO", "scikit-learn"], award: "1st place" },
+    { id: "p-satellite", name: "Building segmentation on satellite images", short: "Satellite", kind: "ml", r: 50, featured: true,
+      meta: "Bachelor thesis, Kyiv Polytechnic Institute. February to June 2024. Grade 95 of 100.",
+      line: "Three label-free methods against U-Net, U-Net++ and FPN on 8,366 satellite tiles. Networks: 0.80 IoU. Without labels: 0.37 at best.",
+      tools: ["PyTorch", "segmentation-models-pytorch", "OpenCV", "scikit-image", "scikit-learn"],
+      links: [{ t: "Code on GitHub", u: "https://github.com/kvitka-dykogo-granatu/Satellite-image-segmentation" }] },
+    { id: "p-rnnlogic", name: "Knowledge graph completion with RNNLogic", short: "RNNLogic", kind: "ml", r: 34,
+      meta: "Big Data Research Project, BDMA master.",
+      line: "Neurosymbolic reasoning on knowledge graphs. I optimised the C++ rule miner, compared Mamba architectures and built dashboards for rule grounding.",
+      tools: ["C++", "Python"] },
+    { id: "p-ebiss", name: "Spatio-temporal streaming survey", short: "eBISS", kind: "de", r: 34,
+      meta: "Poster, eBISS 2025 summer school.", line: "A survey of spatio-temporal stream processing, presented as a poster.", tools: [], award: "Best Poster" },
+    { id: "x-ulb", name: "MobilityDB research internship", short: "MobilityDB", kind: "de", r: 34,
+      meta: "Université libre de Bruxelles. July to August 2025.",
+      line: "MobilityDB is an open-source database extension for moving objects. I worked on C++ functions for spatio-temporal stream processing.", tools: ["C++", "PostgreSQL"] },
+    { id: "p-code4ukraine", name: "Code4Ukraine 2022", short: "Code4UA", kind: "de", r: 34,
+      meta: "Hackathon, 2022. Team lead.", line: "A map and data pipeline for insulin availability.", tools: ["Python"], award: "1st place",
+      links: [{ t: "Code on GitHub", u: "https://github.com/kvitka-dykogo-granatu/insulinewarriors" }] },
+    { id: "p-int20h", name: "INT20H 2023", short: "INT20H", kind: "ml", r: 34,
+      meta: "Hackathon, 2023.", line: "Taxi ride duration prediction.", tools: ["Python"], award: "5th place" },
+    { id: "p-scholamigo", name: "ScholAmigo", kind: "de", r: 26, meta: "Course project, BDMA master.",
+      line: "A scholarship recommender.", tools: ["Airflow", "PySpark", "LLM parsing"] },
+    { id: "p-spark", name: "Spark text analysis", kind: "de", r: 26, meta: "Course project, BDMA master.", line: "Text analysis at scale with Spark.", tools: ["Spark"] },
+    { id: "p-agents", name: "Multi-agent research assistant", kind: "de", r: 26, meta: "Personal project, 2026.",
+      line: "Agents that searched and filed the literature for my thesis, with automated backups.", tools: ["Claude Code", "Zotero", "Semantic Scholar"] },
+    { id: "p-musical", name: "Musical Fingerprint", kind: "viz", r: 26, meta: "Personal project.",
+      line: "A dashboard built from my own Spotify listening history.", tools: ["Streamlit", "Python"],
+      links: [{ t: "Code on GitHub", u: "https://github.com/kvitka-dykogo-granatu/musical_fingerprint" }] },
+    { id: "p-vitality", name: "Vitality", kind: "viz", r: 26, meta: "Personal project.", line: "A fitness dashboard built from 9 years of my own Google Fit data.", tools: ["Python"] },
+    { id: "p-apartment", name: "Apartment-layout graph extraction", kind: "viz", r: 26, meta: "Web app.",
+      line: "Turns an apartment floor plan into a graph.", tools: ["Flask", "JavaScript Canvas"],
+      links: [{ t: "Code on GitHub", u: "https://github.com/kvitka-dykogo-granatu/floorplan_layout" }] },
+    { id: "p-nutri", name: "Nutri-Score classification", kind: "ml", r: 26, meta: "Course project, BDMA master.", line: "Predicting the Nutri-Score of food products.", tools: ["Python", "machine learning"] },
+    { id: "p-trees", name: "Tree-root prediction", kind: "ml", r: 26, meta: "Course project.", line: "Prediction with gradient boosting.", tools: ["Gradient boosting"] },
+    { id: "p-fairness", name: "Practical fairness in AI", kind: "ml", r: 26, meta: "Course assignment, BDMA master.", line: "Measuring and reducing unfairness in a model.", tools: ["Python"],
+      links: [{ t: "Code on GitHub", u: "https://github.com/kvitka-dykogo-granatu/fairness_project" }] },
+    { id: "p-voting", name: "Voting theory implementations", kind: "da", r: 26, meta: "Course project, BDMA master.", line: "Implementations of voting rules and their properties.", tools: ["Python"] }
+  ];
+  function hasTool(p, re) { return p.tools.some(function (t) { return re.test(t); }); }
+  var LENSES = [
+    { id: "k-viz", label: "Data visualization", color: KIND.viz.color, test: function (p) { return p.kind === "viz"; } },
+    { id: "k-de",  label: "Data engineering",   color: KIND.de.color,  test: function (p) { return p.kind === "de"; } },
+    { id: "k-da",  label: "Data analysis",      color: KIND.da.color,  test: function (p) { return p.kind === "da"; } },
+    { id: "k-ml",  label: "Machine learning",   color: KIND.ml.color,  test: function (p) { return p.kind === "ml"; } },
+    { id: "t-award", label: "Awarded", color: "var(--stage-ink)", test: function (p) { return !!p.award; } },
+    { id: "t-torch", label: "PyTorch", color: "var(--stage-ink)", test: function (p) { return hasTool(p, /PyTorch/); } },
+    { id: "t-d3", label: "D3.js", color: "var(--stage-ink)", test: function (p) { return hasTool(p, /D3/); } },
+    { id: "t-sql", label: "SQL and databases", color: "var(--stage-ink)", test: function (p) { return hasTool(p, /SQL|DuckDB|PostgreSQL/); } },
+    { id: "t-spark", label: "Spark and Airflow", color: "var(--stage-ink)", test: function (p) { return hasTool(p, /Spark|Airflow/); } },
+    { id: "t-cpp", label: "C++", color: "var(--stage-ink)", test: function (p) { return hasTool(p, /C\+\+/); } },
+    { id: "t-dash", label: "Dashboards", color: "var(--stage-ink)", test: function (p) { return hasTool(p, /Streamlit|Flask|D3/) || p.id === "p-vitality"; } }
   ];
 
-  var size = 560, pad = 6;
-  var root = d3.hierarchy({ children: groups })
-    .sum(function (d) { return d.v || 0; })
-    .sort(function (a, b) { return b.value - a.value; });
-  d3.pack().size([size - pad * 2, size - pad * 2]).padding(function (d) { return d.depth === 0 ? 14 : 7; })(root);
-
+  /* ---------- Stage map ---------- */
+  var box = document.getElementById("map-box");
   var svg = d3.select("#project-map");
-  var g = svg.append("g").attr("transform", "translate(" + pad + "," + pad + ")");
-  var status = document.getElementById("map-status");
-  var defaultStatus = status.textContent;
+  var tip = document.getElementById("hover-tip");
+  var detail = document.getElementById("detail");
+  var W = 760, H = 520;
+  var narrow = box.clientWidth < 600;
+  if (narrow) { W = 520; H = 600; svg.attr("viewBox", "0 0 " + W + " " + H); }
+  var centers = narrow
+    ? { viz: [W * 0.3, H * 0.27], ml: [W * 0.68, H * 0.3], de: [W * 0.32, H * 0.72], da: [W * 0.74, H * 0.74] }
+    : { viz: [W * 0.27, H * 0.36], ml: [W * 0.7, H * 0.38], de: [W * 0.3, H * 0.74], da: [W * 0.74, H * 0.76] };
+  var scale = narrow ? 0.9 : 1;
+  P.forEach(function (p) { p.rr = p.r * scale; p.x = centers[p.kind][0] + (Math.random() - 0.5) * 60; p.y = centers[p.kind][1] + (Math.random() - 0.5) * 60; });
 
-  g.selectAll("circle.group-ring")
-    .data(root.children).enter().append("circle")
-    .attr("class", "group-ring")
-    .style("--grp", function (d) { return d.data.color; })
-    .attr("cx", function (d) { return d.x; }).attr("cy", function (d) { return d.y; }).attr("r", function (d) { return d.r; });
+  var gLabels = svg.append("g").attr("class", "cluster-labels");
+  var corner = { viz: [18, 26, "start"], ml: [W - 18, 26, "end"], de: [18, H - 14, "start"], da: [W - 18, H - 14, "end"] };
+  Object.keys(KIND).forEach(function (k) {
+    gLabels.append("text").attr("x", corner[k][0]).attr("y", corner[k][1]).attr("text-anchor", corner[k][2])
+      .attr("font-size", narrow ? 13 : 15).attr("font-weight", 700).attr("fill", KIND[k].color).attr("fill-opacity", 0.85)
+      .attr("font-family", "var(--font-display)").text(KIND[k].name);
+  });
+  var gSets = svg.append("g").attr("class", "sets");
+  var gNodes = svg.append("g").attr("class", "nodes");
+  var node = gNodes.selectAll("g.node").data(P).enter().append("g")
+    .attr("class", "node").attr("role", "button").attr("tabindex", 0)
+    .attr("aria-label", function (d) { return d.name + ", " + KIND[d.kind].name; });
+  node.append("circle").attr("class", "body").attr("r", function (d) { return d.rr; }).attr("fill", function (d) { return KIND[d.kind].color; });
+  node.filter(function (d) { return d.short; }).append("text")
+    .attr("text-anchor", "middle").attr("dominant-baseline", "central")
+    .attr("font-size", function (d) { return d.rr >= 45 ? 15 : 11.5; })
+    .text(function (d) { return d.short; });
 
-  var node = g.selectAll("g.node")
-    .data(root.leaves()).enter().append("g")
-    .attr("class", "node")
-    .attr("role", "link")
-    .attr("tabindex", 0)
-    .attr("aria-label", function (d) { return d.data.label + ", " + d.parent.data.name; })
-    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-  node.append("circle")
-    .attr("r", function (d) { return d.r; })
-    .attr("fill", function (d) { return d.parent.data.color; })
-    .attr("stroke", "var(--bg)")
-    .attr("stroke-width", 1.5);
-
-  node.append("title").text(function (d) { return d.data.label; });
-
-  node.filter(function (d) { return d.data.short && d.r > 34; })
-    .append("text")
-    .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "central")
-    .attr("font-size", function (d) { return Math.max(13, Math.min(18, d.r / 3.2)); })
-    .text(function (d) { return d.data.short; });
-
-  function go(d) {
-    var el = document.getElementById(d.data.id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  var sim = d3.forceSimulation(P)
+    .force("x", d3.forceX(function (d) { return centers[d.kind][0]; }).strength(0.12))
+    .force("y", d3.forceY(function (d) { return centers[d.kind][1]; }).strength(0.12))
+    .force("collide", d3.forceCollide(function (d) { return d.rr + 5; }).iterations(2))
+    .force("charge", d3.forceManyBody().strength(-8))
+    .on("tick", tick);
+  function clamp(d) { d.x = Math.max(d.rr + 4, Math.min(W - d.rr - 4, d.x)); d.y = Math.max(d.rr + 4, Math.min(H - d.rr - 4, d.y)); }
+  var setDirty = false;
+  function tick() {
+    P.forEach(clamp);
+    node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+    if (active) scheduleSet();
   }
-  node.on("click", function (e, d) { go(d); })
-    .on("keydown", function (e, d) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(d); } })
-    .on("mouseenter focus", function (e, d) { status.textContent = d.data.label; })
-    .on("mouseleave blur", function () { status.textContent = defaultStatus; });
+  if (reduce) { sim.stop(); for (var i = 0; i < 300; i++) sim.tick(); tick(); }
+  else { sim.alpha(1).alphaDecay(0.03); }
+
+  node.call(d3.drag()
+    .on("start", function (e, d) { if (!e.active) sim.alphaTarget(0.25).restart(); d.fx = d.x; d.fy = d.y; d._moved = false; })
+    .on("drag", function (e, d) { d.fx = e.x; d.fy = e.y; d._moved = true; })
+    .on("end", function (e, d) { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+  function showTip(e, d) {
+    var r = box.getBoundingClientRect();
+    var sx = r.width / W;
+    tip.textContent = d.name;
+    tip.style.left = (d.x * sx) + "px";
+    tip.style.top = ((d.y - d.rr) * sx) + "px";
+    tip.hidden = false;
+  }
+  node.on("mouseenter", function (e, d) { showTip(e, d); })
+    .on("mousemove", function (e, d) { showTip(e, d); })
+    .on("mouseleave", function () { tip.hidden = true; })
+    .on("click", function (e, d) { if (d._moved) return; select(d); })
+    .on("keydown", function (e, d) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(d); } });
+
+  var selected = null;
+  function select(d) {
+    selected = d;
+    node.classed("selected", function (n) { return n === d; });
+    var h = "";
+    h += '<div><div class="d-title">' + esc(d.name) + "</div>";
+    h += '<div class="d-meta">' + esc(d.meta) + "</div>";
+    h += '<p class="d-line">' + esc(d.line) + "</p>";
+    if (d.tools.length) h += '<div class="d-tools">' + d.tools.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>";
+    h += "</div>";
+    h += '<div class="d-award">' + (d.award ? esc(d.award) : "") + "</div>";
+    var links = (d.links || []).map(function (l) { return '<a href="' + l.u + '">' + esc(l.t) + "</a>"; });
+    if (d.featured) links.unshift('<a href="#' + d.id + '">Read the full story</a>');
+    else if (document.getElementById(d.id)) links.unshift('<a href="#' + d.id + '">Find it in the list</a>');
+    if (links.length) h += '<div class="d-links">' + links.join("") + "</div>";
+    detail.innerHTML = h;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* ---------- Lenses and bubble sets ---------- */
+  var lensList = document.getElementById("lenses");
+  var active = null;
+  LENSES.forEach(function (L) {
+    var li = document.createElement("li");
+    if (L.sep) { li.className = "lens-sep"; li.setAttribute("aria-hidden", "true"); lensList.appendChild(li); return; }
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "lens"; b.id = "lens-" + L.id; b.textContent = L.label;
+    b.style.setProperty("--lc", L.color); b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () { setLens(active === L ? null : L); });
+    li.appendChild(b); lensList.appendChild(li);
+  });
+  function setLens(L) {
+    active = L;
+    lensList.querySelectorAll(".lens").forEach(function (b) { b.setAttribute("aria-pressed", L && b.id === "lens-" + L.id ? "true" : "false"); });
+    node.classed("dim", function (d) { return L ? !L.test(d) : false; });
+    gSets.selectAll("*").remove();
+    if (L) { drawSet(); if (!reduce) sim.alpha(0.15).restart(); }
+  }
+  var BS = null;
+  try {
+    new Function("return import('https://cdn.jsdelivr.net/npm/bubblesets@1.0.2/bubblesets.js')")()
+      .then(function (m) { BS = m; if (active) drawSet(); })
+      .catch(function () { BS = null; });
+  } catch (e) { BS = null; }
+
+  var raf = null;
+  function scheduleSet() { if (raf) return; raf = requestAnimationFrame(function () { raf = null; drawSet(); }); }
+  function rect(d, pad) { return { x: d.x - d.rr - pad, y: d.y - d.rr - pad, width: 2 * (d.rr + pad), height: 2 * (d.rr + pad) }; }
+  function drawSet() {
+    if (!active) return;
+    var members = P.filter(active.test), others = P.filter(function (p) { return !active.test(p); });
+    if (!members.length) return;
+    var d;
+    if (BS) {
+      var bs = new BS.BubbleSet();
+      var list = bs.createOutline(BS.BubbleSet.addPadding(members.map(function (m) { return rect(m, 2); }), 10),
+                                  BS.BubbleSet.addPadding(others.map(function (m) { return rect(m, 2); }), 4), null);
+      var outline = new BS.PointPath(list).transform([new BS.ShapeSimplifier(0.0), new BS.BSplineShapeGenerator(), new BS.ShapeSimplifier(0.0)]);
+      d = outline.toString();
+    } else {
+      var pts = [];
+      members.forEach(function (m) { for (var a = 0; a < 16; a++) { var t = a / 16 * Math.PI * 2; pts.push([m.x + (m.rr + 12) * Math.cos(t), m.y + (m.rr + 12) * Math.sin(t)]); } });
+      var hull = d3.polygonHull(pts) || pts;
+      d = "M" + hull.map(function (p) { return p.join(" "); }).join("L") + "Z";
+    }
+    var path = gSets.selectAll("path").data([d]);
+    path.enter().append("path").attr("class", "setpath").merge(path)
+      .attr("d", function (x) { return x; }).attr("fill", active.color).attr("stroke", active.color);
+  }
+
+  select(P[0]);
+
+  /* ---------- Charts in the project sections ---------- */
+  function barChart(sel, rows, opts) {
+    var s = d3.select(sel); if (s.empty()) return;
+    var vb = s.attr("viewBox").split(" ").map(Number), w = vb[2], h = vb[3];
+    var m = { l: opts.labelW, r: 46, t: 8, b: 20 };
+    var x = d3.scaleLinear().domain([0, opts.max]).range([m.l, w - m.r]);
+    var y = d3.scaleBand().domain(rows.map(function (r) { return r.label; })).range([m.t, h - m.b]).paddingInner(0.32);
+    var g = s.append("g");
+    g.selectAll("line.grid").data(x.ticks(opts.ticks)).enter().append("line").attr("class", "grid")
+      .attr("x1", x).attr("x2", x).attr("y1", m.t).attr("y2", h - m.b).attr("stroke", "var(--line)").attr("stroke-width", 1);
+    g.selectAll("text.tick").data(x.ticks(opts.ticks)).enter().append("text").attr("class", "tick")
+      .attr("x", x).attr("y", h - 6).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", "var(--ink-3)").text(opts.fmt);
+    var row = g.selectAll("g.row").data(rows).enter().append("g").attr("class", "row");
+    row.append("rect").attr("x", x(0)).attr("y", function (r) { return y(r.label); }).attr("height", y.bandwidth())
+      .attr("width", function (r) { return x(r.value) - x(0); }).attr("rx", 3)
+      .attr("fill", function (r) { return r.color; }).attr("fill-opacity", function (r) { return r.strong ? 1 : 0.78; });
+    row.append("title").text(function (r) { return r.label + ": " + opts.fmt(r.value); });
+    row.append("text").attr("x", m.l - 8).attr("y", function (r) { return y(r.label) + y.bandwidth() / 2; })
+      .attr("dominant-baseline", "central").attr("text-anchor", "end").attr("font-size", 11.5)
+      .attr("fill", "var(--ink)").attr("font-weight", function (r) { return r.strong ? 600 : 400; }).text(function (r) { return r.label; });
+    row.append("text").attr("x", function (r) { return x(r.value) + 6; }).attr("y", function (r) { return y(r.label) + y.bandwidth() / 2; })
+      .attr("dominant-baseline", "central").attr("font-size", 11.5).attr("font-weight", 600)
+      .attr("fill", "var(--ink)").text(function (r) { return opts.fmt(r.value); });
+  }
+  var acc = "var(--accent)", mut = "var(--ink-3)";
+  barChart("#chart-birds", [
+    { label: "ResNet-50, frozen", value: 48.0, color: mut },
+    { label: "ResNet-50, fine-tuned", value: 69.5, color: mut },
+    { label: "ConvNeXt, simple pipeline", value: 85.0, color: mut },
+    { label: "ConvNeXt, full pipeline", value: 87.5, color: mut },
+    { label: "EVA-02, simple pipeline", value: 89.5, color: acc },
+    { label: "EVA-02, full pipeline", value: 92.0, color: acc, strong: true }
+  ], { labelW: 170, max: 100, ticks: 5, fmt: function (v) { return v + "%"; } });
+  barChart("#chart-sat", [
+    { label: "K-Means", value: 0.3498, color: mut },
+    { label: "Fuzzy C-Means", value: 0.3491, color: mut },
+    { label: "Active contours", value: 0.2349, color: mut },
+    { label: "Active contours, inverse checked", value: 0.3736, color: mut },
+    { label: "FPN", value: 0.7832, color: acc },
+    { label: "U-Net", value: 0.7934, color: acc },
+    { label: "U-Net++", value: 0.7992, color: acc, strong: true }
+  ], { labelW: 200, max: 1, ticks: 5, fmt: function (v) { return d3.format(".2f")(v); } });
 })();
 </script>
 </body>
