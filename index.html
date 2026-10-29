@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Olha Baliasina</title>
+<meta name="description" content="Olha Baliasina. Data scientist and visualization developer in Paris. Projects in machine learning, data engineering and interactive visualization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&amp;family=Source+Sans+3:ital,wght@0,400;0,600;1,400&amp;display=swap">
+<style>
+/* Layout: one calm column (max 1080px), left-aligned. The hero pairs text with a circle-packed map of the projects,
+   a nod to the thesis tool where every circle is one team. Everything else is quiet lists with hairlines. */
+:root {
+  --bg: #F2F4F8;
+  --surface: #FFFFFF;
+  --ink: #141B2D;
+  --ink-2: #4C5670;
+  --ink-3: #7B849B;
+  --line: #D3D9E4;
+  --accent: #1E4FD8;
+  --accent-soft: #E3EAFB;
+  --on-accent: #FFFFFF;
+  --c-ml: #7A3FB5;
+  --c-de: #0E8A8C;
+  --c-viz: #D9831A;
+  --c-da: #CF3F5C;
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --measure: 62ch;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1422; --surface: #161E31; --ink: #E9EDF5; --ink-2: #A9B2C6; --ink-3: #7F89A1;
+    --line: #2A3449; --accent: #86A4FF; --accent-soft: #1C2A4D; --on-accent: #0E1422;
+    --c-ml: #BF93EA; --c-de: #44C0C2; --c-viz: #F0B04E; --c-da: #F27F96;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1422; --surface: #161E31; --ink: #E9EDF5; --ink-2: #A9B2C6; --ink-3: #7F89A1;
+  --line: #2A3449; --accent: #86A4FF; --accent-soft: #1C2A4D; --on-accent: #0E1422;
+  --c-ml: #BF93EA; --c-de: #44C0C2; --c-viz: #F0B04E; --c-da: #F27F96;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  background: var(--bg); z-index: 10;
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(1.7rem, 1.2rem + 1.6vw, 2.3rem); font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem); font-weight: 700; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2em; }
+li + li { margin-top: 0.45em; }
+
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Top bar */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
+.top nav { display: flex; gap: 4px 18px; flex-wrap: wrap; }
+.top nav a { color: var(--ink-2); text-decoration: none; font-size: 0.95rem; font-weight: 600; }
+.top nav a:hover { color: var(--ink); }
+
+/* Hero */
+.hero .wrap {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 32px 48px; align-items: center; padding-block: 56px 48px;
+}
+.hero-text { min-width: 0; }
+.hero h1 {
+  font-size: clamp(2.6rem, 1.6rem + 4.2vw, 4.6rem); font-weight: 700; letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 96;
+}
+.kicker { color: var(--ink-2); font-weight: 600; margin-bottom: 14px; }
+.lead { font-size: 1.2rem; line-height: 1.5; max-width: var(--measure); margin-top: 22px; color: var(--ink); }
+.lead + .lead { margin-top: 14px; font-size: 1.05rem; color: var(--ink-2); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px;
+  font-weight: 600; text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--surface);
+}
+.btn:hover { border-color: var(--ink-3); }
+.btn-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn-primary:hover { border-color: var(--accent); filter: brightness(1.06); }
+
+.map { min-width: 0; margin: 0; justify-self: center; width: 100%; max-width: 520px; }
+.map svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.map figcaption { margin-top: 10px; font-size: 0.92rem; color: var(--ink-2); }
+.map-status { min-height: 1.5em; font-weight: 600; color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 0.9rem; color: var(--ink-2); list-style: none; padding: 0; }
+.legend li { display: inline-flex; align-items: center; gap: 7px; }
+.legend li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); }
+.node { cursor: pointer; }
+.node circle { transition: stroke-width 120ms; }
+.node:hover circle, .node:focus-visible circle { stroke: var(--ink); stroke-width: 2.5; }
+.node:focus-visible { outline: none; }
+.node text { font-family: var(--font-display); font-weight: 700; fill: var(--on-accent); pointer-events: none; }
+.group-ring { fill: var(--grp); fill-opacity: 0.13; stroke: var(--grp); stroke-opacity: 0.55; stroke-width: 1; }
+
+/* Sections */
+section { border-top: 1px solid var(--line); }
+section .wrap { padding-block: 56px; }
+.section-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-bottom: 36px; max-width: var(--measure); }
+.section-head p { color: var(--ink-2); font-size: 1.05rem; }
+
+/* Featured projects */
+.proj { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 20px 48px; padding-block: 36px; border-top: 1px solid var(--line); }
+.proj:first-of-type { border-top: 0; padding-top: 0; }
+.proj-head { min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.chip {
+  font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  color: var(--chip); border: 1px solid var(--chip); background: color-mix(in srgb, var(--chip) 10%, transparent);
+}
+.chip-ml { --chip: var(--c-ml); } .chip-de { --chip: var(--c-de); } .chip-viz { --chip: var(--c-viz); } .chip-da { --chip: var(--c-da); }
+.proj-head .meta { color: var(--ink-2); margin-top: 10px; font-size: 0.98rem; }
+.proj-head .stack { margin-top: 18px; font-size: 0.92rem; color: var(--ink-2); line-height: 1.5; }
+.proj-head .stack strong { color: var(--ink); font-weight: 600; }
+.proj-head .links { margin-top: 12px; font-size: 0.95rem; }
+.proj-body { min-width: 0; max-width: var(--measure); }
+.proj-body > p { font-size: 1.08rem; }
+.proj-body ul { margin-top: 16px; }
+.proj-body li { padding-left: 2px; }
+.figures { display: flex; flex-wrap: wrap; gap: 18px 36px; margin: 22px 0 0; padding: 18px 0 0; border-top: 1px dashed var(--line); }
+.figures div { display: flex; flex-direction: column; min-width: 0; }
+.figures dt { order: 2; font-size: 0.88rem; color: var(--ink-2); }
+.figures dd { order: 1; margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; line-height: 1.1; letter-spacing: -0.01em; }
+
+/* More projects */
+.more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; list-style: none; padding: 0; margin: 0; }
+.more li { padding-block: 16px; border-top: 1px solid var(--line); min-width: 0; }
+.more li + li { margin-top: 0; }
+.more .name { font-weight: 600; display: block; }
+.more .what { color: var(--ink-2); display: block; margin-top: 3px; font-size: 0.97rem; }
+.more .tools { color: var(--ink-3); display: block; margin-top: 5px; font-size: 0.88rem; }
+.more .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--dot); margin-right: 8px; vertical-align: 1px; }
+.more .repo { display: inline-block; margin-top: 6px; font-size: 0.9rem; }
+
+/* Experience and education: a dated list, in time order */
+.timeline { list-style: none; padding: 0; margin: 0; max-width: 820px; }
+.timeline li { display: grid; grid-template-columns: minmax(0, 170px) minmax(0, 1fr); gap: 6px 32px; padding-block: 20px; border-top: 1px solid var(--line); }
+.timeline li:first-child { border-top: 0; padding-top: 0; }
+.timeline li + li { margin-top: 0; }
+.timeline .when { color: var(--ink-2); font-size: 0.98rem; padding-top: 3px; }
+.timeline .role { font-weight: 600; font-size: 1.08rem; }
+.timeline .org { color: var(--ink-2); }
+.timeline .desc { margin-top: 8px; max-width: var(--measure); }
+.timeline .tools { margin-top: 6px; color: var(--ink-3); font-size: 0.9rem; }
+
+/* Awards and skills */
+.two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+.awards { list-style: none; padding: 0; margin: 0; }
+.awards li { padding-block: 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 64px) minmax(0, 1fr); gap: 16px; }
+.awards li:first-child { border-top: 0; padding-top: 0; }
+.awards li + li { margin-top: 0; }
+.awards .year { color: var(--ink-2); }
+.awards .what { color: var(--ink-2); display: block; font-size: 0.95rem; }
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 32px; margin: 0; }
+.skills div { min-width: 0; }
+.skills dt { font-weight: 600; margin-bottom: 4px; }
+.skills dd { margin: 0; color: var(--ink-2); font-size: 0.98rem; }
+
+/* Contact */
+.contact .wrap { padding-block: 56px 72px; }
+.contact-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.foot { color: var(--ink-3); font-size: 0.9rem; margin-top: 36px; }
+
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); padding-block: 40px 36px; }
+  .map { justify-self: start; }
+  .proj { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two-col { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .more { grid-template-columns: minmax(0, 1fr); }
+  .timeline li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .skills { grid-template-columns: minmax(0, 1fr); }
+  .figures { gap: 14px 24px; }
+  .figures dd { font-size: 1.45rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Olha Baliasina</a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-text">
+      <p class="kicker">Paris. Open to junior data roles across Europe.</p>
+      <h1>Olha Baliasina</h1>
+      <p class="lead">I build data tools and I check every number in them. Pipelines, models and interactive charts, from messy source records to a screen someone can use.</p>
+      <p class="lead">In 2026 I finished the Erasmus Mundus master in Big Data Management and Analytics (BDMA) in Brussels, Barcelona and Paris. My master thesis at Inria is a visual analytics tool for the managers of a research centre. Its poster won the Best Poster Award at IEEE VIS 2026.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#projects">See the projects</a>
+        <a class="btn" href="https://www.linkedin.com/in/olha-baliasina" rel="me">LinkedIn</a>
+        <a class="btn" href="https://github.com/kvitka-dykogo-granatu" rel="me">GitHub</a>
+      </div>
+    </div>
+
+    <figure class="map" aria-labelledby="map-caption">
+      <svg id="project-map" viewBox="0 0 560 560" role="group" aria-label="Map of projects as packed circles, grouped by kind of work"></svg>
+      <figcaption id="map-caption">
+        <span class="map-status" id="map-status">Every circle is one project. Tap one to jump to it.</span>
+        <ul class="legend">
+          <li style="--dot: var(--c-viz)">Data visualization</li>
+          <li style="--dot: var(--c-ml)">Machine learning</li>
+          <li style="--dot: var(--c-de)">Data engineering</li>
+          <li style="--dot: var(--c-da)">Data analysis</li>
+        </ul>
+      </figcaption>
+    </figure>
+  </div>
+</div>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <p>Three in detail, then the rest in short. Every number below comes from the thesis, the slides or the notebooks of that project.</p>
+    </div>
+
+    <article class="proj" id="p-xray">
+      <div class="proj-head">
+        <div class="chips"><span class="chip chip-viz">Data visualization</span><span class="chip chip-de">Data engineering</span><span class="chip chip-ml">Machine learning</span></div>
+        <h3>X-Raying a Research Institute</h3>
+        <p class="meta">Master thesis in the AVIZ team at Inria Saclay, April to September 2026. Supervised by Petra Isenberg and Jean-Daniel Fekete. Best Poster Award, IEEE VIS 2026.</p>
+        <p class="stack"><strong>Built with</strong> Python, SQL in DuckDB, JavaScript and D3 v7, a locally run language model (Qwen 3.6), NMF topic modelling, uv.</p>
+        <p class="links"><a href="https://doi.org/10.5281/zenodo.22166133">Poster on Zenodo</a></p>
+      </div>
+      <div class="proj-body">
+        <p>The managers of the Inria Saclay research centre keep their records in four systems built for other purposes: a team registry, annual activity reports, the national publication archive and the national thesis platform. I merged them into one data warehouse and built a browser tool on top of it, so the managers can explore 76 research teams, their members and their publications from 2008 to 2024. The tool runs behind Inria's login and needs no server.</p>
+        <ul>
+          <li>Wrote one parser per source and loaded 4,534 activity reports, 16,208 publication records and 1,077 doctoral theses into a DuckDB warehouse with raw, staging, core and mart layers.</li>
+          <li>Wrote the matching rules for teams, people and institutions in SQL. An author counts as matched only when team membership in the same year confirms the name match: 20,432 confirmed links out of 35,269 candidate pairs. The rule was to under-credit, never to mis-credit.</li>
+          <li>Added 22 assertions, table checksums and a planted-violation test to every build. One command rebuilds everything in a median of 154 seconds, and a build replaces the live warehouse only after every check passes.</li>
+          <li>Compared a local language model (Qwen 3.6) with an NMF topic model for sorting 12,027 publications into the institute's 14 themes. I judged both on three signals neither model had seen, with 95% intervals from 300 bootstrap resamples. The language model's themes matched the teams' declared themes for 61.7% of team–publication pairs, against 47.4% for NMF.</li>
+          <li>Designed and built the interface in D3: a circle-packed overview of the centre, a team view, a comparison of selected teams and a collaboration circle. Every number states the years it covers, and a missing value is shown as missing, never as zero.</li>
+          <li>Ran the requirements study (a survey and a card-sorting workshop with 8 committee members) and the evaluation: both centre managers finished a task from their own work without help, and 5 researchers rated the tool between 5.3 and 5.7 out of 7 on the ICE-T questionnaire.</li>
+        </ul>
+        <dl class="figures">
+          <div><dt>research teams, 2008 to 2024</dt><dd>76</dd></div>
+          <div><dt>publication records merged</dt><dd>16,208</dd></div>
+          <div><dt>one-command rebuild, median</dt><dd>154 s</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="proj" id="p-birds">
+      <div class="proj-head">
+        <div class="chips"><span class="chip chip-ml">Machine learning</span></div>
+        <h3>Fine-grained bird species classification</h3>
+        <p class="meta">Class Kaggle competition, Machine Learning course, CentraleSupélec, January to February 2026. Team of two; I built the whole pipeline.</p>
+        <p class="stack"><strong>Built with</strong> PyTorch, timm, YOLOv8, Grounding DINO, Hugging Face Transformers, Albumentations, OpenCV, scikit-learn, Google Colab.</p>
+      </div>
+      <div class="proj-body">
+        <p>Recognise 20 bird species from photos, with about 60 photos per species and 1,212 labelled images in total. Some pairs look almost the same, like the American Crow and the Fish Crow. Our team finished 1st on the private leaderboard with 92% accuracy; 2nd place had 88%.</p>
+        <ul>
+          <li>Started with baselines to see what matters. A frozen ResNet-50 scored 48%; fine-tuning it gave about 70%.</li>
+          <li>Compared four backbones in the same simple pipeline. EVA-02 Large, a Vision Transformer pretrained on iNaturalist photos of living species, beat ConvNeXt-Base by 4 points. Everything added after it gave 2 more points.</li>
+          <li>Added bird detection (YOLOv8, with Grounding DINO as a fallback for the 13 test photos YOLO missed), 5-fold cross-validation on all 1,212 images (96.95% ± 0.43%) and test-time augmentation with 4 views per photo.</li>
+          <li>Kept a 304-million-parameter model from overfitting on 1,212 images: a tiny learning rate for the backbone, a faster one for the new head, warm-up, label smoothing, Mixup and CutMix, early stopping.</li>
+          <li>Traced 78% of the remaining errors to two look-alike pairs with a confusion matrix, and trained small specialist classifiers that step in only when the main model hesitates between the pair.</li>
+          <li>Ran experiments one change at a time, with the same folds and seed, and logged every run. Dropped weight averaging and model soup when the numbers did not hold up.</li>
+        </ul>
+        <dl class="figures">
+          <div><dt>on the private leaderboard</dt><dd>1st</dd></div>
+          <div><dt>accuracy (2nd place: 88%)</dt><dd>92%</dd></div>
+          <div><dt>from first baseline to final model</dt><dd>48% → 92%</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="proj" id="p-satellite">
+      <div class="proj-head">
+        <div class="chips"><span class="chip chip-ml">Machine learning</span></div>
+        <h3>Building segmentation on satellite images</h3>
+        <p class="meta">Bachelor thesis, Igor Sikorsky Kyiv Polytechnic Institute, February to June 2024. Grade 95 of 100.</p>
+        <p class="stack"><strong>Built with</strong> PyTorch, segmentation-models-pytorch, Torchvision, Albumentations, OpenCV, scikit-image, scikit-fuzzy, scikit-learn, Kaggle.</p>
+        <p class="links"><a href="https://github.com/kvitka-dykogo-granatu/Satellite-image-segmentation">Code on GitHub</a></p>
+      </div>
+      <div class="proj-body">
+        <p>Find buildings on satellite photos. I compared three methods that need no labels (K-Means, Fuzzy C-Means and morphological active contours) with three pretrained segmentation networks (U-Net, U-Net++ and FPN), on the same photos and with the same metrics.</p>
+        <ul>
+          <li>Prepared 8,366 images from the Mapping Challenge dataset with 71,871 building outlines, turned the outlines into pixel masks and split the data 8:1:1 into training, validation and test sets.</li>
+          <li>Turned colour clusters and active-contour outputs into building masks, and scored every method with IoU, Dice and pixel accuracy on the same 837 test images.</li>
+          <li>Fine-tuned U-Net, U-Net++ and FPN with ImageNet-pretrained ResNet-50 encoders, with Dice loss, on a Kaggle P100 GPU within 30 free hours a week.</li>
+          <li>The networks reached about 0.80 IoU. The best method without labels reached 0.37, and that figure used the true masks to pick the right cluster, so it is an upper bound.</li>
+          <li>Found later, while reviewing the code, that a modified network with dilated convolutions was never switched on, so its small gain was noise. Since then I check that a change is really in the model before I compare numbers.</li>
+        </ul>
+        <dl class="figures">
+          <div><dt>IoU with pretrained networks</dt><dd>0.80</dd></div>
+          <div><dt>IoU, best method without labels</dt><dd>0.37</dd></div>
+          <div><dt>satellite images</dt><dd>8,366</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <div class="section-head" style="margin-top: 56px; margin-bottom: 8px;">
+      <h3 id="more-projects">More projects</h3>
+    </div>
+    <ul class="more">
+      <li id="p-scholamigo"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>ScholAmigo</span><span class="what">Scholarship recommender. Course project, BDMA master.</span><span class="tools">Airflow, PySpark, LLM-based parsing</span></li>
+      <li id="p-rnnlogic"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Knowledge graph completion with RNNLogic</span><span class="what">Big Data Research Project, BDMA master. Neurosymbolic reasoning on knowledge graphs: optimised the C++ rule miner, compared Mamba architectures, built dashboards for rule grounding.</span><span class="tools">C++, Python</span></li>
+      <li id="p-ebiss"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Spatio-temporal streaming survey</span><span class="what">Poster at the eBISS 2025 summer school. Best Poster.</span><span class="tools">Research survey</span></li>
+      <li id="p-musical"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Musical Fingerprint</span><span class="what">Dashboard built from my own Spotify listening history. Personal project.</span><span class="tools">Streamlit, Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/musical_fingerprint">Code on GitHub</a></li>
+      <li id="p-vitality"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Vitality</span><span class="what">Fitness dashboard built from 9 years of my own Google Fit data. Personal project.</span><span class="tools">Python</span></li>
+      <li id="p-apartment"><span class="name"><span class="dot" style="--dot: var(--c-viz)"></span>Apartment-layout graph extraction</span><span class="what">Web app that turns an apartment floor plan into a graph.</span><span class="tools">Flask, JavaScript Canvas</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/floorplan_layout">Code on GitHub</a></li>
+      <li id="p-spark"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Spark text analysis</span><span class="what">Course project, BDMA master.</span><span class="tools">Spark</span></li>
+      <li id="p-nutri"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Nutri-Score classification</span><span class="what">Course project, BDMA master.</span><span class="tools">Python, machine learning</span></li>
+      <li id="p-trees"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Tree-root prediction</span><span class="what">Course project.</span><span class="tools">Gradient boosting</span></li>
+      <li id="p-voting"><span class="name"><span class="dot" style="--dot: var(--c-da)"></span>Voting theory implementations</span><span class="what">Course project, BDMA master.</span><span class="tools">Python</span></li>
+      <li id="p-fairness"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>Practical fairness in AI</span><span class="what">Course assignment, BDMA master.</span><span class="tools">Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/fairness_project">Code on GitHub</a></li>
+      <li id="p-agents"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Multi-agent research assistant</span><span class="what">Agents that searched and filed the literature for my thesis, with automated backups. Personal project.</span><span class="tools">Claude Code, Zotero, Semantic Scholar</span></li>
+      <li id="p-code4ukraine"><span class="name"><span class="dot" style="--dot: var(--c-de)"></span>Code4Ukraine 2022</span><span class="what">Hackathon, 1st place, team lead. A map and data pipeline for insulin availability.</span><span class="tools">Python</span><a class="repo" href="https://github.com/kvitka-dykogo-granatu/insulinewarriors">Code on GitHub</a></li>
+      <li id="p-int20h"><span class="name"><span class="dot" style="--dot: var(--c-ml)"></span>INT20H 2023</span><span class="what">Hackathon, 5th place. Taxi ride duration prediction.</span><span class="tools">Python, machine learning</span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Experience</h2>
+    </div>
+    <ul class="timeline">
+      <li id="x-inria">
+        <span class="when">April to September 2026</span>
+        <div>
+          <div class="role">Thesis intern, AVIZ team</div>
+          <div class="org">Inria Saclay, France</div>
+          <p class="desc">Built and evaluated "X-Raying a Research Institute": a data warehouse and a visual analytics tool for the managers of the centre. See the project above.</p>
+          <p class="tools">Python, SQL, DuckDB, JavaScript, D3</p>
+        </div>
+      </li>
+      <li id="x-ulb">
+        <span class="when">July to August 2025</span>
+        <div>
+          <div class="role">Research intern, MobilityDB</div>
+          <div class="org">Université libre de Bruxelles, Belgium</div>
+          <p class="desc">Worked on MobilityDB, an open-source database extension for moving objects, and on C++ functions for spatio-temporal stream processing.</p>
+          <p class="tools">C++, PostgreSQL</p>
+        </div>
+      </li>
+      <li id="x-gr8tech">
+        <span class="when">March to December 2023</span>
+        <div>
+          <div class="role">Junior DevOps Engineer</div>
+          <div class="org">GR8Tech, Kyiv, Ukraine</div>
+          <p class="desc">Monitoring and infrastructure for an iGaming platform.</p>
+          <p class="tools">Grafana, Prometheus, Kubernetes, Terraform, Docker, GitLab CI/CD, AWS (S3, RDS, EC2)</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Education</h2>
+    </div>
+    <ul class="timeline">
+      <li>
+        <span class="when">2024 to 2026</span>
+        <div>
+          <div class="role">Erasmus Mundus Joint Master in Big Data Management and Analytics (BDMA)</div>
+          <div class="org">Université libre de Bruxelles, Universitat Politècnica de Catalunya, CentraleSupélec (Université Paris-Saclay)</div>
+          <p class="desc">Thesis at Inria Saclay, defended in Barcelona in September 2026.</p>
+        </div>
+      </li>
+      <li>
+        <span class="when">2020 to 2024</span>
+        <div>
+          <div class="role">BSc in System Analysis</div>
+          <div class="org">Igor Sikorsky Kyiv Polytechnic Institute, Ukraine</div>
+          <p class="desc">GPA 97.34 of 100. Bachelor thesis on building segmentation on satellite images, grade 95 of 100.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="two-col">
+      <div>
+        <div class="section-head"><h2>Skills</h2></div>
+        <dl class="skills">
+          <div><dt>Languages</dt><dd>Python, SQL, JavaScript, C++</dd></div>
+          <div><dt>Machine learning</dt><dd>PyTorch, timm, scikit-learn, Hugging Face Transformers, OpenCV, Albumentations, YOLOv8, segmentation-models-pytorch. Image classification and segmentation, Vision Transformers, gradient boosting, topic modelling, knowledge-graph embeddings.</dd></div>
+          <div><dt>Data engineering</dt><dd>DuckDB, Spark and PySpark, Airflow, PostgreSQL and MobilityDB, dimensional modelling, build checks and assertions.</dd></div>
+          <div><dt>Visualization and user research</dt><dd>D3.js, Streamlit, Plotly, Flask with JavaScript Canvas. Surveys, card sorting, think-aloud sessions, the ICE-T questionnaire.</dd></div>
+          <div><dt>DevOps and cloud</dt><dd>Docker, Kubernetes, Terraform, GitLab CI/CD, Grafana, Prometheus, AWS (S3, RDS, EC2).</dd></div>
+          <div><dt>Everyday tools</dt><dd>Git, Jupyter, Google Colab, Kaggle, uv, LaTeX, Claude Code, Zotero.</dd></div>
+          <div><dt>Spoken languages</dt><dd>Ukrainian (native), English (C1), German (A2 to B1), French (beginner).</dd></div>
+        </dl>
+      </div>
+      <div>
+        <div class="section-head"><h2>Awards</h2></div>
+        <ul class="awards">
+          <li><span class="year">2026</span><span>Best Poster Award, IEEE VIS 2026<span class="what">"X-Raying a Research Institute", the master thesis poster</span></span></li>
+          <li><span class="year">2026</span><span>1st place, class Kaggle competition<span class="what">Fine-grained bird species classification, CentraleSupélec</span></span></li>
+          <li><span class="year">2025</span><span>Best Poster, eBISS 2025 summer school<span class="what">Spatio-temporal streaming survey</span></span></li>
+          <li><span class="year">2023</span><span>5th place, INT20H hackathon<span class="what">Taxi ride duration prediction</span></span></li>
+          <li><span class="year">2022</span><span>1st place, Code4Ukraine hackathon<span class="what">Team lead. Insulin availability map and pipeline</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Contact</h2>
+      <p>I am based in Paris and I am looking for a junior role in data science, data engineering, data visualization or data analysis, anywhere in Europe. The easiest way to reach me is LinkedIn.</p>
+    </div>
+    <div class="contact-row">
+      <a class="btn btn-primary" href="https://www.linkedin.com/in/olha-baliasina" rel="me">Message me on LinkedIn</a>
+      <a class="btn" href="https://github.com/kvitka-dykogo-granatu" rel="me">GitHub</a>
+    </div>
+    <p class="foot">Olha Baliasina. Last updated October 2026.</p>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(function () {
+  if (!window.d3) return;
+  var groups = [
+    { key: "viz", name: "Data visualization", color: "var(--c-viz)", children: [
+      { id: "p-xray", label: "X-Raying a Research Institute", short: "X-Ray", v: 3.2 },
+      { id: "p-musical", label: "Musical Fingerprint", v: 1 },
+      { id: "p-vitality", label: "Vitality", v: 1 },
+      { id: "p-apartment", label: "Apartment-layout graph extraction", v: 1 }
+    ]},
+    { key: "ml", name: "Machine learning", color: "var(--c-ml)", children: [
+      { id: "p-birds", label: "Fine-grained bird species classification", short: "Birds", v: 3.2 },
+      { id: "p-satellite", label: "Building segmentation on satellite images", short: "Satellite", v: 3.2 },
+      { id: "p-rnnlogic", label: "Knowledge graph completion with RNNLogic", v: 1 },
+      { id: "p-nutri", label: "Nutri-Score classification", v: 1 },
+      { id: "p-trees", label: "Tree-root prediction", v: 1 },
+      { id: "p-fairness", label: "Practical fairness in AI", v: 1 },
+      { id: "p-int20h", label: "INT20H 2023 hackathon", v: 1 }
+    ]},
+    { key: "de", name: "Data engineering", color: "var(--c-de)", children: [
+      { id: "p-scholamigo", label: "ScholAmigo", v: 1 },
+      { id: "p-spark", label: "Spark text analysis", v: 1 },
+      { id: "x-ulb", label: "MobilityDB research internship", v: 1 },
+      { id: "p-ebiss", label: "Spatio-temporal streaming survey", v: 1 },
+      { id: "p-agents", label: "Multi-agent research assistant", v: 1 },
+      { id: "p-code4ukraine", label: "Code4Ukraine 2022 hackathon", v: 1 }
+    ]},
+    { key: "da", name: "Data analysis", color: "var(--c-da)", children: [
+      { id: "p-voting", label: "Voting theory implementations", v: 1 }
+    ]}
+  ];
+
+  var size = 560, pad = 6;
+  var root = d3.hierarchy({ children: groups })
+    .sum(function (d) { return d.v || 0; })
+    .sort(function (a, b) { return b.value - a.value; });
+  d3.pack().size([size - pad * 2, size - pad * 2]).padding(function (d) { return d.depth === 0 ? 14 : 7; })(root);
+
+  var svg = d3.select("#project-map");
+  var g = svg.append("g").attr("transform", "translate(" + pad + "," + pad + ")");
+  var status = document.getElementById("map-status");
+  var defaultStatus = status.textContent;
+
+  g.selectAll("circle.group-ring")
+    .data(root.children).enter().append("circle")
+    .attr("class", "group-ring")
+    .style("--grp", function (d) { return d.data.color; })
+    .attr("cx", function (d) { return d.x; }).attr("cy", function (d) { return d.y; }).attr("r", function (d) { return d.r; });
+
+  var node = g.selectAll("g.node")
+    .data(root.leaves()).enter().append("g")
+    .attr("class", "node")
+    .attr("role", "link")
+    .attr("tabindex", 0)
+    .attr("aria-label", function (d) { return d.data.label + ", " + d.parent.data.name; })
+    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  node.append("circle")
+    .attr("r", function (d) { return d.r; })
+    .attr("fill", function (d) { return d.parent.data.color; })
+    .attr("stroke", "var(--bg)")
+    .attr("stroke-width", 1.5);
+
+  node.append("title").text(function (d) { return d.data.label; });
+
+  node.filter(function (d) { return d.data.short && d.r > 34; })
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("dominant-baseline", "central")
+    .attr("font-size", function (d) { return Math.max(13, Math.min(18, d.r / 3.2)); })
+    .text(function (d) { return d.data.short; });
+
+  function go(d) {
+    var el = document.getElementById(d.data.id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  node.on("click", function (e, d) { go(d); })
+    .on("keydown", function (e, d) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(d); } })
+    .on("mouseenter focus", function (e, d) { status.textContent = d.data.label; })
+    .on("mouseleave blur", function () { status.textContent = defaultStatus; });
+})();
+</script>
+</body>
+</html>
